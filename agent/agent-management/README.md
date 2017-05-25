@@ -5,9 +5,9 @@
 
 界面基于EasyUI，图标采用较为开放的`Foundation Icon`(MIT协议)。
 
-`文档vs思维导图`：[开源项目spring-shiro-training思维导图，让项目不再难懂](https://my.oschina.net/u/3080373/blog/875697)
+`文档vs思维导图`：[项目agent-management思维导图，让项目不再难懂]()
 
-`代码生成详见`：[src/test/java/com/wangzhixuan/generator/MysqlGenerator](http://git.oschina.net/wangzhixuan/spring-shiro-training/tree/master/src/test/java/com/wangzhixuan/generator)
+`代码生成详见`：[src/test/java/com/wangzhixuan/generator/MysqlGenerator]
 
 `ueditor`: https://shiro.dreamlu.net/static/ueditor/index.html
 
@@ -45,8 +45,6 @@
 
 如果觉得数据校验不够，请自行添加`hibernate-validator`在Bean上做校验！
 
-更多`shiro`的教程请参考（开涛博客`《跟我学Shiro》`）：http://jinnianshilongnian.iteye.com/category/305053
-
 另外欢迎`Pull Requests`，和我们一起完善该项目！
 
 ## 运行环境
@@ -64,90 +62,23 @@
 如果不需要该功能可以删除`event`目录和`controller`目录下的`WebHooks`相关java文件！
 
 ## 效果图
-<p>
-<img src="http://static.oschina.net/uploads/img/201512/06161620_HLY6.jpg"/>
-</p>
-<p>
-<img src="http://static.oschina.net/uploads/img/201512/06161621_NIlr.jpg"/>
-</p>
-<p>
-<img src="http://static.oschina.net/uploads/img/201512/06161621_63ZV.jpg"/>
-</p>
-<p>
-<img src="http://static.oschina.net/uploads/img/201512/06164718_18nx.jpg"/>
-</p>
-<p>
-<img src="http://static.oschina.net/uploads/img/201512/06161621_NiiM.jpg"/>
-</p>
 
 ## 鸣谢
-<p>
-<a href="http://my.oschina.net/qq596392912" target="_blank">@Dreamlu</a>&nbsp;
-<a href="http://my.oschina.net/u/993551" target="_blank">@刘晓枫</a>
-</p>
+ 
 
 ## 演示效果
-<p>
-<a href="http://shiro.dreamlu.net" target="_blank">http://shiro.dreamlu.net</a> 账号：test 密码：test
-</p>
+ 
 
 ## 技术咨询
-<p>
-QQ群：523720304 &nbsp; 不提供全权限账号，人多手杂，维护时间有限，可本地导入项目运行，admin密码和test一样，谢谢。
-</p>
-<p>
-git地址：<a href="https://git.oschina.net/wangzhixuan/spring-shiro-training.git" target="_blank">https://git.oschina.net/wangzhixuan/spring-shiro-training.git</a>
-</p>
-<p>
-欢迎star、fork，不好的地方，接受狂喷，本着共同学习的心态。
-</p>
+ 
 
 ## 捐助共勉
-<p>
-<img src="http://ww2.sinaimg.cn/small/907f4c96jw1f3sjdhn1dcj208w0aiq3d.jpg" alt="微信" />
-<img src="http://ww3.sinaimg.cn/small/907f4c96jw1f3sjdhkn0rj20by0byq33.jpg" alt="支付宝" />
-</p>
+ 
 
 ## 捐助记录
-`silent`  5元
-
-`truetxw` 5元
-
-`福地` 10元
-
-`AfenG` 10元
-
-`Sky` 50元
-
-`昆明-TOM` 10元
-
-`王刚` 20元
-
-`slieery` 10元
+ 
 
 ## 更新记录
-> 2017-04-20 v1.3.0 添加ueditor，fixed ajax session timeout。
-
-> 升级到mybaits plus 2.0.7，
-
-> 更改验证码为`cookie + cache`存储。
-
-> 用户添加密码加密盐。
-
-> 添加菜单的默认打开状态控制。
-
-> 2016-12-20 v1.2.0 tab加载修改ajax或者iframe，页面默认采用ajax加载！
-
-> 老版本请查看：[v1.1.1](http://git.oschina.net/wangzhixuan/spring-shiro-training/tree/v1.1.1/)
-
-> 2016-12-20 v1.1.1 修改若干`bug`，菜单改为无限级，cache改为spring-cache，shiro添加密码错误次数限制，密码加密改为shiro处理。
-
-> 2016-10-11 v1.1.0 采用`mybatis-plus`简化数据库，去除主从数据库，老版本升级需要执行`database/update_xxxx.sql`。
-
-> 2016-10-01 v1.0.0 升级Spring版本更改log为Log4j2。
-
-`注`: `v1.0.0`等老版源码请见Git Tag。
 
 ## License
-
-( The MIT License )
+( The Personal License )

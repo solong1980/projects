@@ -1,7 +1,7 @@
-# Spring Shiro学习系统
+# Spring Shiro Rop 学习系统
 
 ## 简介
-基于springmvc、spring、mybatis-plus、shiro、easyui、Log4j2简单实用的权限系统。
+基于springmvc、spring、mybatis-plus、shiro、rop、easyui、Log4j2简单实用的权限,接口平台系统。
 
 界面基于EasyUI，图标采用较为开放的`Foundation Icon`(MIT协议)。
 

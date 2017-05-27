@@ -1,5 +1,6 @@
 package com.yz.boster.commons.shiro;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -109,5 +111,21 @@ public class ShiroDbRealm extends AuthorizingRealm {
         SimplePrincipalCollection principals = new SimplePrincipalCollection();
         principals.add(loginName, super.getName());
         super.clearCachedAuthenticationInfo(principals);
+    }
+    
+    /**
+     * 清除角色缓存
+     * @param roleName
+     */
+    public void removeRoleCache(String roleName){
+    	Cache<Object, AuthorizationInfo> cache = super.getAuthorizationCache();
+    	Set<Object> keys = cache.keys();
+    	for (Object object : keys) {
+    		AuthorizationInfo authorizationInfo = cache.get(object);
+    		Collection<String> roles = authorizationInfo.getRoles();
+    		if(roles.contains(roleName)){
+    			cache.remove(object);
+    		}
+		}
     }
 }

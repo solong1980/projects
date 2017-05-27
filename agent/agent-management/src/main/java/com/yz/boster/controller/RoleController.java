@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yz.boster.commons.base.BaseController;
+import com.yz.boster.commons.shiro.ShiroDbRealm;
 import com.yz.boster.commons.utils.PageInfo;
 import com.yz.boster.model.Role;
 import com.yz.boster.service.IRoleService;
@@ -27,6 +28,9 @@ public class RoleController extends BaseController {
     @Autowired
     private IRoleService roleService;
 
+    @Autowired
+    private ShiroDbRealm shiroDbRealm;
+    
     /**
      * 权限管理页
      *
@@ -165,6 +169,9 @@ public class RoleController extends BaseController {
     @ResponseBody
     public Object grant(Long id, String resourceIds) {
         roleService.updateRoleResource(id, resourceIds);
+        Role role = roleService.selectById(id);
+        String name = role.getName();
+        shiroDbRealm.removeRoleCache(name);
         return renderSuccess("授权成功！");
     }
 

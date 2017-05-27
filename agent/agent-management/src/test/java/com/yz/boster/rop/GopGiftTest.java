@@ -63,7 +63,7 @@ public class GopGiftTest {
 		paramValues.add("appSecret", APP_SECRET);
 		paramValues.add("v", "1.0");
 		paramValues.add("format", "json");
-		paramValues.add("sessionId", "54d362df-3f14-45d4-aa03-9c90c0366f9b");
+		paramValues.add("sessionId", "83db8fcc-3cfb-401d-90cf-847dcd10d884");
 		String sign = RopUtils.sign(paramValues.toSingleValueMap(), APP_SECRET);
 		paramValues.add("sign", sign);
 		

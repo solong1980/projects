@@ -10,7 +10,7 @@ public class RopResponseCodes implements Serializable {
 	 public static final int LOGIN_PASSWORD_ERROR = 100001;
 	 public static final int LOGIN_USER_NOT_EXIST = 100002;
 	 public static final int LOGIN_USER_NOT_ACTIVE = 100003;
-	 
+	 public static final int NO_PERMISSION = 100004;
 	 
 	 
 }

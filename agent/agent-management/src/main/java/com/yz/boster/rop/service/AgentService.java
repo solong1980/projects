@@ -54,17 +54,15 @@ public class AgentService extends BaseRopService {
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		// 设置记住密码
 		token.setRememberMe(1 == rememberMe);
-		
+
 		RopResponse ropResponse = new RopResponse();
-		
+
 		try {
 			user.login(token);
 			
 			RopRequestContext ropRequestContext = loginRequest.getRopRequestContext();
-			putSession(ropRequestContext);
-			ropRequestContext.setAttribute(SESSION_USER, user);
+			putSession(user, ropRequestContext);
 			ShiroUser principal = (ShiroUser) user.getPrincipal();
-
 			ropResponse.setSessionId(ropRequestContext.getSessionId());
 			ropResponse.setModelVo(principal);
 			

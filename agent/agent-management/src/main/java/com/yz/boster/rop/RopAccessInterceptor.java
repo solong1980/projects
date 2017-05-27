@@ -1,5 +1,7 @@
 package com.yz.boster.rop;
 
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -27,15 +29,26 @@ public class RopAccessInterceptor extends AbstractInterceptor {
 	 */
 	public void beforeService(RopRequestContext ropRequestContext) {
 		LOGGER.debug("before repRequest:" + ropRequestContext);
-		Session session = ropRequestContext.getSession();
 		// if match the rule,check session exist
 		if (isMatch(ropRequestContext)) {
+			Session session = ropRequestContext.getSession();
 			if (session == null) {
 				// return notify to login
 				RopResponse ropResponse = new RopResponse();
 				ropResponse.setCode(RopResponseCodes.USER_NOT_LOGIN);
 				ropResponse.setMessage("Not Login");
 				ropRequestContext.setRopResponse(ropResponse);
+			} else {
+				// Get subject to check permission from ROP session
+				Subject user = (Subject) ropRequestContext.getSession().getAttribute(ropRequestContext.getSessionId());
+				try {
+					user.checkPermission(ropRequestContext.getMethod());
+				} catch (AuthorizationException e) {
+					RopResponse ropResponse = new RopResponse();
+					ropResponse.setCode(RopResponseCodes.NO_PERMISSION);
+					ropResponse.setMessage("No permission");
+					ropRequestContext.setRopResponse(ropResponse);
+				}
 			}
 		}
 	}

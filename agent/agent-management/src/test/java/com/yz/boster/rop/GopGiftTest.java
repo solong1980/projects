@@ -73,4 +73,53 @@ public class GopGiftTest {
 		System.out.println(responseContent);
 	}
 
+	@Test
+	public void testNotExist() {
+		MultiValueMap<String, String> paramValues = new LinkedMultiValueMap<String, String>();
+		paramValues.add("method", "agent.notExist");
+		paramValues.add("loginName", "longlh");
+		paramValues.add("userName", "longlh");
+		paramValues.add("sex", "0");
+		paramValues.add("age", "0");
+		paramValues.add("password", "");
+		paramValues.add("organization", "");
+		
+		paramValues.add("from", "3");
+		paramValues.add("appKey", APP_KEY);
+		paramValues.add("appSecret", APP_SECRET);
+		paramValues.add("v", "1.0");
+		paramValues.add("format", "json");
+		String sign = RopUtils.sign(paramValues.toSingleValueMap(), APP_SECRET);
+		paramValues.add("sign", sign);
+		
+		String buildGetUrl = buildGetUrl(SERVER_URL, paramValues.toSingleValueMap());
+		System.out.println(buildGetUrl);
+		String responseContent = new RestTemplate().getForObject(buildGetUrl, String.class, paramValues);
+		System.out.println(responseContent);
+	}
+	
+	@Test
+	public void testRegist() {
+		MultiValueMap<String, String> paramValues = new LinkedMultiValueMap<String, String>();
+		paramValues.add("method", "agent.regist");
+		paramValues.add("loginName", "longlh");
+		paramValues.add("userName", "longlh");
+		paramValues.add("sex", "1");
+		paramValues.add("age", "30");
+		paramValues.add("password", "123456");
+		paramValues.add("organization", "longlh");
+		                 
+		paramValues.add("from", "3");
+		paramValues.add("appKey", APP_KEY);
+		paramValues.add("appSecret", APP_SECRET);
+		paramValues.add("v", "1.0");
+		paramValues.add("format", "json");
+		String sign = RopUtils.sign(paramValues.toSingleValueMap(), APP_SECRET);
+		paramValues.add("sign", sign);
+		
+		String buildGetUrl = buildGetUrl(SERVER_URL, paramValues.toSingleValueMap());
+		System.out.println(buildGetUrl);
+		String responseContent = new RestTemplate().getForObject(buildGetUrl, String.class, paramValues);
+		System.out.println(responseContent);
+	}
 }

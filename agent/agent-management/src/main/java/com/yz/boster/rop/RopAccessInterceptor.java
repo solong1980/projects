@@ -73,7 +73,10 @@ public class RopAccessInterceptor extends AbstractInterceptor {
 		// if is a login request do not checking if session exist
 		if ("agent.login".equals(method))
 			return false;
-
+		if ("agent.notExist".equals(method))
+			return false;
+		if ("agent.regist".equals(method))
+			return false;
 		return true;
 	}
 }

@@ -9,6 +9,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rop.RopRequestContext;
 import com.rop.annotation.NeedInSessionType;
@@ -21,12 +22,14 @@ import com.yz.boster.rop.BaseRopService;
 import com.yz.boster.rop.RopResponse;
 import com.yz.boster.rop.RopResponseCodes;
 import com.yz.boster.rop.request.AgentInfoRequest;
+import com.yz.boster.rop.request.AgentRegistRequest;
 import com.yz.boster.rop.request.LoginRequest;
 import com.yz.boster.service.IUserService;
 
 @ServiceMethodBean
 public class AgentService extends BaseRopService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(AgentService.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(AgentService.class);
 
 	@Autowired
 	private IUserService userService;
@@ -51,7 +54,8 @@ public class AgentService extends BaseRopService {
 		// throw new RuntimeException("验证码错误");
 		// }
 		Subject user = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		UsernamePasswordToken token = new UsernamePasswordToken(username,
+				password);
 		// 设置记住密码
 		token.setRememberMe(1 == rememberMe);
 
@@ -59,13 +63,14 @@ public class AgentService extends BaseRopService {
 
 		try {
 			user.login(token);
-			
-			RopRequestContext ropRequestContext = loginRequest.getRopRequestContext();
+
+			RopRequestContext ropRequestContext = loginRequest
+					.getRopRequestContext();
 			putSession(user, ropRequestContext);
 			ShiroUser principal = (ShiroUser) user.getPrincipal();
 			ropResponse.setSessionId(ropRequestContext.getSessionId());
 			ropResponse.setModelVo(principal);
-			
+
 			return ropResponse;
 		} catch (UnknownAccountException e) {
 			LOGGER.error("账号不存在！", e);
@@ -86,6 +91,57 @@ public class AgentService extends BaseRopService {
 			LOGGER.error("Login Error!", e);
 			throw new RuntimeException(e.getMessage(), e);
 		}
+	}
+
+	@ServiceMethod(method = "agent.notExist", version = VERSION_1, needInSession = NeedInSessionType.NO)
+	public Object notExist(AgentRegistRequest agentRegistRequest) {
+		RopResponse ropResponse = new RopResponse();
+
+		String loginName = agentRegistRequest.getLoginName();
+		if (null == loginName) {
+			ropResponse.setCode(RopResponseCodes.PARAMETER_ERROR);
+			ropResponse.setMessage("请输入帐号！");
+			return ropResponse;
+		}
+
+		User userByNames = userService.selectOneByLoginName(agentRegistRequest
+				.getLoginName());
+
+		if (userByNames != null) {
+			ropResponse.setCode(RopResponseCodes.ACCOUNT_EXIST);
+			ropResponse.setMessage("帐号已存在！");
+			return ropResponse;
+		} else {
+			ropResponse.setCode(RopResponseCodes.SUCCESS);
+			return ropResponse;
+		}
+	}
+
+	@ServiceMethod(method = "agent.regist", version = VERSION_1, needInSession = NeedInSessionType.NO)
+	@Transactional
+	public Object regiest(AgentRegistRequest agentRegistRequest) {
+		User userByLoginName = userService.selectOneByLoginName(agentRegistRequest
+				.getLoginName());
+
+		RopResponse ropResponse = new RopResponse();
+		if (userByLoginName != null) {
+			ropResponse.setCode(RopResponseCodes.ACCOUNT_EXIST);
+			ropResponse.setMessage("帐号已存在！");
+			return ropResponse;
+		}
+
+		User user = agentRegistRequest.getUser();
+
+		boolean success = userService.insert(user);
+		if (success) {
+			ropResponse.setCode(RopResponseCodes.SUCCESS);
+			ropResponse.setModelVo(user);
+		} else {
+			ropResponse.setCode(RopResponseCodes.ADD_USER_ERROR);
+			ropResponse.setMessage("添加你的帐号时出现错误！");
+		}
+		return ropResponse;
+
 	}
 
 	@ServiceMethod(method = "agent.info", version = VERSION_1, needInSession = NeedInSessionType.YES)

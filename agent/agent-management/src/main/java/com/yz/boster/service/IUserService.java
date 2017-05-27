@@ -27,4 +27,6 @@ public interface IUserService extends IService<User> {
     void selectDataGrid(PageInfo pageInfo);
 
     void deleteUserById(Long id);
+
+	User selectOneByLoginName(String userName);
 }

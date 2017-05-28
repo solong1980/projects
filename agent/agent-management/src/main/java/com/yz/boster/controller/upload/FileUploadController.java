@@ -39,6 +39,11 @@ public class FileUploadController extends BaseController {
 		return "file/plupload";
 	}
 	
+	@GetMapping("/plUploadUiFile")
+	public String plUploadUiFile(Model model) {
+		return "file/plupload_ui";
+	}
+	
 	@PostMapping(value = "/upload")
 	@ResponseBody
 	public String uploadFileHandler(@RequestParam("file") MultipartFile[] files,

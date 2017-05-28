@@ -127,7 +127,7 @@
 
 	uploader.on( 'uploadComplete', function( file ) {
 	    $( '#'+file.id ).find('.progress').fadeOut();
-	});	
+	});
 })(jQuery);
 
 </script>

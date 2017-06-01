@@ -1,7 +1,6 @@
 package com.yz.boster.controller.upload;
 
 import java.io.File;
-import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,21 +32,21 @@ public class FileUploadController extends BaseController {
 	public String webUploadFile(Model model) {
 		return "file/webupload";
 	}
-	
+
 	@GetMapping("/plUploadFile")
 	public String plUploadFile(Model model) {
 		return "file/plupload";
 	}
-	
+
 	@GetMapping("/plUploadUiFile")
 	public String plUploadUiFile(Model model) {
 		return "file/plupload_ui";
 	}
-	
+
 	@PostMapping(value = "/upload")
 	@ResponseBody
-	public String uploadFileHandler(@RequestParam("file") MultipartFile[] files,
-			HttpSession session) {
+	public String uploadFileHandler(
+			@RequestParam("file") MultipartFile[] files, HttpSession session) {
 		if (files != null && files.length > 0) {
 			String path = session.getServletContext().getRealPath("/Images");
 			for (MultipartFile file : files) {
@@ -62,13 +61,13 @@ public class FileUploadController extends BaseController {
 					File serverFile = new File(dir.getAbsolutePath()
 							+ File.separator + file.getOriginalFilename());
 					file.transferTo(serverFile);
+					return file.getOriginalFilename();// UUID.randomUUID().toString();
 				} catch (Exception e) {
 					e.printStackTrace();
 					break;
 				}
 			}
-			
-			return UUID.randomUUID().toString();
+			return "";
 		} else {
 			return "";
 		}

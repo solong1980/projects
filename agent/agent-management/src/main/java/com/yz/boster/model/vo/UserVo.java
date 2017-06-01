@@ -21,6 +21,9 @@ public class UserVo implements Serializable {
 	@JsonIgnore
 	private String password;
 	@JsonIgnore
+	private String repassword;
+
+	@JsonIgnore
 	private String salt; // 密码加密盐
 
 	private Integer sex;
@@ -76,6 +79,14 @@ public class UserVo implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password == null ? null : password.trim();
+	}
+
+	public String getRepassword() {
+		return repassword;
+	}
+
+	public void setRepassword(String repassword) {
+		this.repassword = repassword == null ? null : repassword.trim();
 	}
 
 	public String getSalt() {

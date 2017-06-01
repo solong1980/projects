@@ -29,4 +29,6 @@ public interface IUserService extends IService<User> {
     void deleteUserById(Long id);
 
 	User selectOneByLoginName(String userName);
+	
+	void insert(UserVo userVo);
 }

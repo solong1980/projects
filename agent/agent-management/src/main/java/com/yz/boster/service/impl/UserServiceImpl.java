@@ -51,7 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements
 		user.setLoginName(userVo.getLoginName());
 		EntityWrapper<User> wrapper = new EntityWrapper<User>(user);
 		if (null != userVo.getLoginName()) {
-			wrapper.where("login_name like '%{0}%'", userVo.getLoginName());
+			wrapper.where("login_name like concat('%',{0},'%')", userVo.getLoginName());
 		}
 		return this.selectList(wrapper);
 	}
@@ -126,6 +126,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements
 	public void deleteUserById(Long id) {
 		this.deleteById(id);
 		userRoleMapper.deleteByUserId(id);
+	}
+
+	@Override
+	public void insert(UserVo userVo) {
+		User user = BeanUtils.copy(userVo, User.class);
+		user.setCreateTime(new Date());
+		this.insert(user);
 	}
 
 }

@@ -16,8 +16,10 @@ import com.rop.annotation.NeedInSessionType;
 import com.rop.annotation.ServiceMethod;
 import com.rop.annotation.ServiceMethodBean;
 import com.yz.boster.commons.shiro.ShiroUser;
+import com.yz.boster.commons.utils.InvitionCodeUtil;
 import com.yz.boster.commons.utils.StringUtils;
 import com.yz.boster.model.User;
+import com.yz.boster.rop.BaseRopRequest;
 import com.yz.boster.rop.BaseRopService;
 import com.yz.boster.rop.RopResponse;
 import com.yz.boster.rop.RopResponseCodes;
@@ -120,8 +122,8 @@ public class AgentService extends BaseRopService {
 	@ServiceMethod(method = "agent.regist", version = VERSION_1, needInSession = NeedInSessionType.NO)
 	@Transactional
 	public Object regiest(AgentRegistRequest agentRegistRequest) {
-		User userByLoginName = userService.selectOneByLoginName(agentRegistRequest
-				.getLoginName());
+		User userByLoginName = userService
+				.selectOneByLoginName(agentRegistRequest.getLoginName());
 
 		RopResponse ropResponse = new RopResponse();
 		if (userByLoginName != null) {
@@ -150,6 +152,14 @@ public class AgentService extends BaseRopService {
 		User user = userService.selectById(userId);
 		RopResponse ropResponse = new RopResponse();
 		ropResponse.setModelVo(user);
+		return ropResponse;
+	}
+
+	@ServiceMethod(method = "agent.genCode", version = VERSION_1, needInSession = NeedInSessionType.YES)
+	public Object genCode(BaseRopRequest request) {
+		Long userId = getCurrentUserId(request);
+		RopResponse ropResponse = new RopResponse();
+		ropResponse.setModelVo(InvitionCodeUtil.toSerialCode(userId));
 		return ropResponse;
 	}
 

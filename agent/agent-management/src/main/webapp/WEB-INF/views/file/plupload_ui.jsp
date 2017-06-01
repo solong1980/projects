@@ -105,7 +105,13 @@ body, p, div {
 		<table>
 			<tr></tr>
 			<tr>
-				<label>上传文件</label><td><button id="upFile" onclick="javascript:return false;">Upload</button></td>
+				<td><label>上传文件</label></td><td><button id="upFile" onclick="javascript:return false;">Upload</button></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<ul id="file-list">
+					</ul>
+				</td>
 			</tr>
 		</table>		
 	</form>
@@ -141,7 +147,7 @@ body, p, div {
 		});
 		
 		var $batchId = $('#batchId');
-		
+		var fileUploadCompletedArr = [];
 		var uploader = $("#uploader").plupload({
 			// General settings
 			runtimes : 'html5,flash,silverlight,html4',
@@ -153,14 +159,14 @@ body, p, div {
 			// Maximum file size
 			max_file_size : '20mb',
 
-			chunk_size: '1mb',
+			//chunk_size: '1mb',
 
 			// Resize images on clientside if we can
 			// resize : {width : 320, height : 240, quality : 90},
 			resize : {
-				width : 200, 
-				height : 400, 
-				quality : 90,
+				//width : 200, 
+				//height : 400, 
+				quality : 100,
 				crop: true // crop to exact dimensions
 			},
 
@@ -276,13 +282,22 @@ body, p, div {
 	                // Called when file has finished uploading
 	                log('[FileUploaded] File:', file, "Info:", info);
 	                debugger
-	    			var batchId = $batchId.val();
+	    		    
+	                var file_name = file.name; //文件名
+	                var html = '<li id="file-' + file.id +'">'
+	                +'<a href="${staticPath }/file/download/'+info.response
+	                +'"><p class="file-name">'
+					+ file_name
+					+ '</p></a><p class="progress"></p></li>';
+	                
+	                fileUploadCompletedArr.push(html);
+
+	                var batchId = $batchId.val();
 	    		    if(batchId)
 	    		    	batchId = batchId + "," + info.response;
 	    		    else
 	    		    	batchId = info.response;
 	    		    $batchId.val(batchId);
-	                
 	            },
 	  
 	            ChunkUploaded: function(up, file, info) {
@@ -293,6 +308,21 @@ body, p, div {
 	            UploadComplete: function(up, files) {
 	                // Called when all files are either uploaded or failed
 	                log('[UploadComplete]');
+	                
+	                
+	                for (var i = 0, len = fileUploadCompletedArr.length; i < len; i++) {
+	    				$(fileUploadCompletedArr[i] ).appendTo('#file-list');
+	    				/* !function(i) {
+	    					previewImage(files[i], function(imgsrc) {
+	    						$('#file-' + files[i].id).append('<img src="'+ imgsrc +'" />');
+	    					})
+	    				}(i); */
+	    			}
+	                
+	                var html = '<li id="file-' + files[i].id +'"><p class="file-name">'
+						+ file_name
+						+ '</p><p class="progress"></p></li>';
+					$(html).appendTo('#file-list');
 	            },
 	 
 	            Destroy: function(up) {

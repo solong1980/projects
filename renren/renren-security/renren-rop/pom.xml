@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>io.renren</groupId>
+		<artifactId>renren-security</artifactId>
+		<version>${renren-version}</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>renren-rop</artifactId>
+	<packaging>jar</packaging>
+	<description>rop</description>
+
+	<properties>
+		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+		<jdk.version>1.8</jdk.version>
+		<rop.version>2.0.7-SNAPSHOT</rop.version>
+	</properties>
+
+	<dependencies>
+	<dependency>
+			<groupId>io.renren</groupId>
+			<artifactId>renren-api</artifactId>
+			<version>${renren-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.renren</groupId>
+			<artifactId>renren-common</artifactId>
+			<version>${renren-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.renren</groupId>
+			<artifactId>renren-shiro</artifactId>
+			<version>${renren-version}</version>
+		</dependency>
+		
+		<!-- rop -->
+		<dependency>
+			<groupId>com.rop</groupId>
+			<artifactId>rop</artifactId>
+			<version>${rop.version}</version>
+		</dependency>
+	</dependencies>
+</project>

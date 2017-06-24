@@ -3,6 +3,7 @@ package com.yz.boster.rop.service;
 import io.renren.entity.SysUserEntity;
 import io.renren.entity.UserEntity;
 import io.renren.service.UserService;
+import io.renren.utils.InvitionCodeUtil;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -21,7 +22,6 @@ import com.rop.RopRequestContext;
 import com.rop.annotation.NeedInSessionType;
 import com.rop.annotation.ServiceMethod;
 import com.rop.annotation.ServiceMethodBean;
-import com.yz.boster.commons.utils.InvitionCodeUtil;
 import com.yz.boster.rop.BaseRopRequest;
 import com.yz.boster.rop.BaseRopService;
 import com.yz.boster.rop.RopResponse;

@@ -1,4 +1,4 @@
-package com.yz.boster.commons.utils;
+package io.renren.utils;
 
 import java.util.Random;
 

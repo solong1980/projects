@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>素材管理</title>
+#parse("sys/header.html")
+
+<script src="${rc.contextPath}/statics/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="${rc.contextPath}/statics/plugins/plupload/moxie.min.js"></script>
+<script src="${rc.contextPath}/statics/plugins/plupload/plupload.full.min.js"></script>
+<script src="${rc.contextPath}/statics/plugins/plupload/jquery.ui.plupload/jquery.ui.plupload.min.js"></script>
+<script src="${rc.contextPath}/statics/plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>
+<script src="${rc.contextPath}/statics/plugins/plupload/i18n/zh_CN.js"></script>
+<style type="text/css">
+.wraper {
+	padding: 5px 0;
+}
+
+.btn-wraper {
+	text-align: center;
+}
+
+.btn-wraper input {
+	margin: 0 10px;
+}
+.wraper {
+     -webkit-border-radius: 0 !important;
+     -moz-border-radius: 0 !important;
+     border-radius: 0 !important;
+}
+#file-list{
+	width: 500px;
+}
+#file-list li {
+	margin-bottom: 10px;
+}
+
+.file-name {
+	line-height: 30px;
+}
+
+.progress {
+	height: 4px;
+	font-size: 0;
+	line-height: 4px;
+	background: orange;
+	width: 0;
+}
+
+#drag-area{ border: 1px solid #ccc; height: 80px; line-height: 80px; text-align: center; color: #aaa; width: 90%; margin: 10px auto;}
+
+.checkbox,.radio{display: inline-block;*display: inline;*zoom:1;height: 24px; line-height: 24px; margin-right: 20px;}
+.checkbox ins,.radio ins{display: inline-block;*display: inline;*zoom:1; width: 23px; height: 22px; vertical-align: middle; background: url(http://www.bootcss.com/p/icheck/skins/square/blue.png) no-repeat; margin-right: 8px; -webkit-transition:all 0.1s linear; -moz-transition:all 0.1s linear; -o-transition:all 0.1s linear; -ms-transition:all 0.1s linear; transition:all 0.1s linear;vertical-align: middle;}
+.checkbox ins{background-position: 0px 0px; }
+.radio ins{background-position: -120px 0px; }
+.checkbox .hover{background-position: -24px 0px; }
+.checkbox .checked{background-position: -48px 0px; }
+.checkbox .enable{background-position: -96px 0px;}
+.checkbox .disabled{background-position: -72px 0px;}
+.radio .hover{background-position: -144px 0px;}
+.radio .checked{background-position: -168px 0px;}
+.radio .enable{background-position: -214px 0px;}
+.radio .disabled{background-position: -191px 0px;}
+.checkbox span,.radio span{display: inline-block;*display: inline;*zoom:1;vertical-align: middle; }
+.typearea{width: 550px; margin: auto auto;}
+</style>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="素材名称">
+			</div>
+			<a class="btn btn-default" @click="query">查询</a>
+			
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+     
+   	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">素材名称:</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="material.name" placeholder="素材名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">素材类型:</div>
+			   	<!-- <div class="btn-group" data-toggle="buttons">  
+					<label class="btn btn-primary active" >  
+						<input type="radio" name="options" id="option1" autocomplete="off" checked>实时  
+					</label>  
+					<label class="btn btn-primary">  
+						<input type="radio" name="options" id="option2" autocomplete="off">模拟  
+					</label>
+				</div> -->
+				<!-- <div class="btn-group" data-toggle="buttons">  
+					
+					<label class="btn btn-default">
+						<input type="radio" v-model="material.type" name="type" value="10" /> 图片
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" v-model="material.type" name="type" value="20" /> 视频
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" v-model="material.type" name="type" value="30" /> 音频
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" v-model="material.type" name="type" value="40" /> 字体
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" v-model="material.type" name="type" value="50" /> 挂件
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" v-model="material.type" name="type" value="60" /> 滤镜
+					</label>
+				</div> -->
+				<div class="col-sm-10 btn-group typearea" data-toggle="buttons">
+					<!-- 类型 10:图片，20:视频，30:音频，40:字体，50:挂件，60:滤镜 -->
+			        <div class="radio" @click="updateMaterialType(10)" name="type" value="10" style="cursor: default;"><ins class=""></ins><span>图片 </span></div>
+			        <div class="radio" @click="updateMaterialType(20)" name="type" value="20" style="cursor: default;"><ins class=""></ins><span>视频</span></div>
+			        <div class="radio" @click="updateMaterialType(30)" name="type" value="30" style="cursor: default;"><ins class=""></ins><span>音频</span></div>
+			        <div class="radio" @click="updateMaterialType(40)" name="type" value="40" style="cursor: default;"><ins class=""></ins><span>字体</span></div>
+			        <div class="radio" @click="updateMaterialType(50)" name="type" value="50" style="cursor: default;"><ins class=""></ins><span>挂件</span></div>
+			        <div class="radio" @click="updateMaterialType(60)" name="type" value="60" style="cursor: default;"><ins class=""></ins><span>滤镜</span></div>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">作者:</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="material.maker" placeholder="作者"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">标签:</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="material.remark" placeholder="标签"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">文件:</div>
+			   	<div class="wraper col-sm-10">
+					<p id="drag-area">把要上传的文件拖放到这里(请使用支持html5的浏览器)</p>
+					<ul id="file-list"></ul>
+					<div id="attachment_list" class="btn-wraper">
+					<input type="button" value="选择文件..." id="browse" />
+					<input type="button" value="开始上传" id="upload-btn" />
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">描述:</div>
+			   	<div class="col-sm-10">
+			      <textarea class="form-control" rows="3" v-model="material.description" placeholder="描述"></textarea>
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+</body>
+<script src="${rc.contextPath}/js/material/materials.js?_${date.systemTime}"></script>
+<script type="text/javascript">
+		var $attachmentList = $('#attachment_list');
+		var uploader = new plupload.Uploader({ //实例化一个plupload上传对象
+			browse_button : 'browse',
+			url : '../attachments/file/upload',
+			flash_swf_url : '${rc.contextPath}/static/plugins/plupload/Moxie.swf',
+			silverlight_xap_url : '${rc.contextPath}/static/plugins/plupload/Moxie.xap',
+			drop_element : 'drag-area',
+			max_file_size : '20000kb',
+			chunk_size: '0',
+			rename: true,
+			sortable: true,
+			dragdrop: true,
+			views: {
+				list: true,
+				thumbs: true, // Show thumbs
+				active: 'thumbs'
+			},
+			filters : {
+				mime_types : [ //只允许上传图片文件和rar压缩文件
+					{ title : "素材文件", extensions : "jpg,gif,png,bmp,mp4,txt" }, 
+					{ title : "RAR压缩文件", extensions : "zip" }
+				],
+				max_file_size : '20000kb', //最大只能上传100000kb的文件
+				prevent_duplicates : true //不允许队列中存在重复文件
+			}
+		});
+		uploader.init(); //初始化
+
+		//绑定文件上传进度事件
+		uploader.bind('UploadProgress',function(uploader,file){
+			$('#file-'+file.id+' .progress').css('width',file.percent + '%');//控制进度条
+		});
+		
+		uploader.bind('FileUploaded',function(uploader,file,result){
+			debugger
+			vm.appendAttachmentIds($.parseJSON(result.response));
+			/* $.each($.parseJSON(result.response),function(index,item){
+				debugger
+				var $inputFileId = $('<input type="hidden" v-model="material.attachments.id" value="'+item+'"/>');
+				$attachmentList.append($inputFileId);
+			}) */
+			/* var batchId = $batchId.val();
+		    if(batchId)
+		    	batchId = batchId + "," + result.response;
+		    else
+		    	batchId = result.response;
+		    $batchId.val(batchId); */
+		});
+		
+		/* uploader.on( 'uploadSuccess', function( file,response ) {
+		    $( '#'+file.id ).find('p.state').text('已上传');
+		    var batchId = $batchId.val();
+		    if(batchId)
+		    	batchId = batchId + "," + response._raw;
+		    else
+		    	batchId = response._raw;
+		    $batchId.val(batchId);
+		}); */
+		
+		//上传按钮
+		$('#upload-btn').click(function(){
+			uploader.start(); //开始上传
+		});
+		
+		//绑定文件添加进队列事件
+		uploader.bind('FilesAdded',function(uploader, files) {
+			for (var i = 0, len = files.length; i < len; i++) {
+				var file_name = files[i].name; //文件名
+				//构造html来更新UI
+				var html = '<li id="file-' + files[i].id +'"><p class="file-name">'
+					+ file_name
+					+ '</p><p class="progress"></p></li>';
+				$(html).appendTo('#file-list');
+				/* !function(i) {
+					previewImage(files[i], function(imgsrc) {
+						$('#file-' + files[i].id).append('<img src="'+ imgsrc +'" />');
+					})
+				}(i); */
+			}
+		});
+
+		//plupload中为我们提供了mOxie对象
+		//有关mOxie的介绍和说明请看：https://github.com/moxiecode/moxie/wiki/API
+		//如果你不想了解那么多的话，那就照抄本示例的代码来得到预览的图片吧
+		function previewImage(file, callback) {//file为plupload事件监听函数参数中的file对象,callback为预览图片准备完成的回调函数
+			if (!file || !/image\//.test(file.type))
+				return; //确保文件是图片
+			if (file.type == 'image/gif') {//gif使用FileReader进行预览,因为mOxie.Image只支持jpg和png
+				var fr = new mOxie.FileReader();
+				fr.onload = function() {
+					callback(fr.result);
+					fr.destroy();
+					fr = null;
+				}
+				fr.readAsDataURL(file.getSource());
+			} else {
+				var preloader = new mOxie.Image();
+				preloader.onload = function() {
+					preloader.downsize(300, 300);//先压缩一下要预览的图片,宽300，高300
+					var imgsrc = preloader.type == 'image/jpeg' ? preloader
+							.getAsDataURL('image/jpeg', 80) : preloader
+							.getAsDataURL(); //得到图片src,实质为一个base64编码的数据
+					callback && callback(imgsrc); //callback传入的参数为预览图片的url
+					preloader.destroy();
+					preloader = null;
+				};
+				preloader.load(file.getSource());
+			}
+		}
+</script>
+
+<script>
+        (function($) {
+            $.icheck = {
+                init: function() {
+                    var _this = this;
+                    _this._checkbox = "checkbox";
+                    _this._radio = "radio";
+                    _this._disabled = "disabled";
+                    _this._enable = "enable";
+                    _this._checked = "checked";
+                    _this._hover = "hover";
+                    _this._arrtype = [_this._checkbox, _this._radio];
+                    _this._mobile = /ipad|iphone|ipod|android|blackberry|windows phone|opera mini|silk/i.test(navigator.userAgent);
+                    $.each(_this._arrtype, function(k, v) {
+                        _this.click(v);
+                        if(!_this._mobile){
+                            _this.mouseover(v);
+                            _this.mouseout(v);
+                        }
+                    });
+                },
+                click: function(elem) {
+                    var _this = this;
+                    elem = "." + elem;
+                    $(document).on("click", elem, function() {
+                        var $this = $(this),
+                            _ins = $this.find("ins");
+                        if (!(_ins.hasClass(_this._disabled) || _ins.hasClass(_this._enable))) {
+                            if ( !! _ins.hasClass(_this._checked)) {
+                                _ins.removeClass(_this._checked).addClass(_this._hover);
+                            } else {
+                                if (/radio/ig.test(elem)) {
+                                    var _name = $this.attr("name");
+                                    $(elem + "[name=" + _name + "]").find("ins").removeClass(_this._checked);
+                                }
+                                $(elem).find("ins").removeClass(_this._hover);
+                                _ins.addClass(_this._checked);
+                            }
+                        }
+                    });
+                },
+                mouseover: function(elem) {
+                    var _this = this;
+                    elem = "." + elem;
+                    $(document).on("mouseover", elem, function() {
+                        var $this = $(this);
+                        var _ins = $this.find("ins");
+                        if (!(_ins.hasClass(_this._disabled) || _ins.hasClass(_this._enable) || _ins.hasClass(_this._checked))) {
+                            _ins.addClass(_this._hover);
+                            $this.css("cursor","pointer");
+                        } else{
+                            $this.css("cursor","default");
+                        }
+                    });
+                },
+                mouseout: function(elem) {
+                    var _this = this;
+                    elem = "." + elem;
+                    $(document).on("mouseout", elem, function() {
+                        $(elem).find("ins").removeClass(_this._hover);
+                    });
+                }
+            };
+
+            $.icheck.init();
+
+        })(jQuery);
+    </script>

@@ -92,7 +92,7 @@
 			<if test="type != null">`type` = #{type}, </if>
 			<if test="makerid != null">`makerid` = #{makerid}, </if>
 			<if test="maker != null">`maker` = #{maker}, </if>
-			<if test="fileCounts != null">`file_count` = #{fileCount}, </if>
+			<if test="fileCount != null">`file_count` = #{fileCount}, </if>
 			<if test="description != null">`description` = #{description}, </if>
 			<if test="createrId != null">`creater_id` = #{createrId}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>

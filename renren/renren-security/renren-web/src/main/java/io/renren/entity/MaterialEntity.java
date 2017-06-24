@@ -7,7 +7,7 @@ package io.renren.entity;
  * @email solong1980@163.com
  * @date 2017-06-22 20:24:04
  */
-public class MaterialsEntity extends BaseEntity {
+public class MaterialEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	private Integer status = 0;
@@ -21,7 +21,7 @@ public class MaterialsEntity extends BaseEntity {
 	private String description;
 
 	// 存放临时文件ID,","连接
-	private AttachmentsEntity[] attachments;
+	private AttachmentEntity[] attachments;
 
 	public void setStatus(Integer status) {
 		this.status = status;
@@ -95,11 +95,11 @@ public class MaterialsEntity extends BaseEntity {
 		return description;
 	}
 
-	public AttachmentsEntity[] getAttachments() {
+	public AttachmentEntity[] getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(AttachmentsEntity[] attachments) {
+	public void setAttachments(AttachmentEntity[] attachments) {
 		this.attachments = attachments;
 	}
 

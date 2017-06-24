@@ -1,7 +1,7 @@
 package io.renren.controller.attachment;
 
-import io.renren.entity.AttachmentsEntity;
-import io.renren.service.AttachmentsService;
+import io.renren.entity.AttachmentEntity;
+import io.renren.service.AttachmentService;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
 import io.renren.utils.R;
@@ -31,24 +31,24 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2017-06-23 19:10:33
  */
 @RestController
-@RequestMapping("attachments")
-public class AttachmentsController {
+@RequestMapping("attachment")
+public class AttachmentController {
 
-	private static Logger logger = LoggerFactory.getLogger(AttachmentsController.class);
+	private static Logger logger = LoggerFactory.getLogger(AttachmentController.class);
 
 	@Autowired
-	private AttachmentsService attachmentsService;
+	private AttachmentService attachmentService;
 
 	/**
 	 * 上传
 	 */
 	@RequestMapping("/file/upload")
-	//@RequiresPermissions("attachments:upload")
+	// @RequiresPermissions("attachment:upload")
 	public List<Long> uploadFileHandler(@RequestParam("file") MultipartFile[] files, HttpSession session) {
 		if (files != null && files.length > 0) {
 			String saveDir = session.getServletContext().getRealPath("/Images");
 			try {
-				return attachmentsService.uploadFile(saveDir, files);
+				return attachmentService.uploadFile(saveDir, files);
 			} catch (Exception e) {
 				logger.error("upload file failure", e);
 				e.printStackTrace();
@@ -61,15 +61,15 @@ public class AttachmentsController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("attachments:list")
+	@RequiresPermissions("attachment:list")
 	public R list(@RequestParam Map<String, Object> params) {
 		// 查询列表数据
 		Query query = new Query(params);
 
-		List<AttachmentsEntity> tAttachmentsList = attachmentsService.queryList(query);
-		int total = attachmentsService.queryTotal(query);
+		List<AttachmentEntity> attachmentList = attachmentService.queryList(query);
+		int total = attachmentService.queryTotal(query);
 
-		PageUtils pageUtil = new PageUtils(tAttachmentsList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(attachmentList, total, query.getLimit(), query.getPage());
 
 		return R.ok().put("page", pageUtil);
 	}
@@ -78,20 +78,20 @@ public class AttachmentsController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("attachments:info")
+	@RequiresPermissions("attachment:info")
 	public R info(@PathVariable("id") Long id) {
-		AttachmentsEntity attachments = attachmentsService.queryObject(id);
+		AttachmentEntity attachment = attachmentService.queryObject(id);
 
-		return R.ok().put("attachments", attachments);
+		return R.ok().put("attachment", attachment);
 	}
 
 	/**
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("attachments:save")
-	public R save(@RequestBody AttachmentsEntity attachments) {
-		attachmentsService.save(attachments);
+	@RequiresPermissions("attachment:save")
+	public R save(@RequestBody AttachmentEntity attachment) {
+		attachmentService.save(attachment);
 
 		return R.ok();
 	}
@@ -100,9 +100,9 @@ public class AttachmentsController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("attachments:update")
-	public R update(@RequestBody AttachmentsEntity attachments) {
-		attachmentsService.update(attachments);
+	@RequiresPermissions("attachment:update")
+	public R update(@RequestBody AttachmentEntity attachment) {
+		attachmentService.update(attachment);
 
 		return R.ok();
 	}
@@ -111,9 +111,9 @@ public class AttachmentsController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("attachments:delete")
+	@RequiresPermissions("attachment:delete")
 	public R delete(@RequestBody Long[] ids) {
-		attachmentsService.deleteBatch(ids);
+		attachmentService.deleteBatch(ids);
 		return R.ok();
 	}
 

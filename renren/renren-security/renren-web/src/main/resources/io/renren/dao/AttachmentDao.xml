@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.renren.dao.AttachmentsDao">
+<mapper namespace="io.renren.dao.AttachmentDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.renren.entity.AttachmentsEntity" id="attachmentsMap">
+    <resultMap type="io.renren.entity.AttachmentEntity" id="attachmentMap">
         <result property="id" column="id"/>
         <result property="materialId" column="material_id"/>
         <result property="name" column="name"/>
@@ -14,12 +14,12 @@
         <result property="uploadTime" column="upload_time"/>
     </resultMap>
 
-	<select id="queryObject" resultType="io.renren.entity.AttachmentsEntity">
-		select * from t_attachments where id = #{value}
+	<select id="queryObject" resultType="io.renren.entity.AttachmentEntity">
+		select * from t_attachment where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="io.renren.entity.AttachmentsEntity">
-		select * from t_attachments
+	<select id="queryList" resultType="io.renren.entity.AttachmentEntity">
+		select * from t_attachment
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -34,11 +34,11 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from t_attachments 
+		select count(*) from t_attachment 
 	</select>
 	 
-	<insert id="save" parameterType="io.renren.entity.AttachmentsEntity" useGeneratedKeys="true" keyProperty="id">
-		insert into t_attachments
+	<insert id="save" parameterType="io.renren.entity.AttachmentEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into t_attachment
 		(
 			`material_id`, 
 			`name`, 
@@ -58,8 +58,8 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="io.renren.entity.AttachmentsEntity">
-		update t_attachments 
+	<update id="update" parameterType="io.renren.entity.AttachmentEntity">
+		update t_attachment 
 		<set>
 			<if test="materialId != null">`material_id` = #{materialId}, </if>
 			<if test="name != null">`name` = #{name}, </if>
@@ -72,11 +72,11 @@
 	</update>
 	
 	<delete id="delete">
-		delete from t_attachments where id = #{value}
+		delete from t_attachment where id = #{value}
 	</delete>
 	
 	<delete id="deleteBatch">
-		delete from t_attachments where id in 
+		delete from t_attachment where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

@@ -1,6 +1,6 @@
 package io.renren.service;
 
-import io.renren.entity.MaterialTagsEntity;
+import io.renren.entity.MaterialTagEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -12,17 +12,17 @@ import java.util.Map;
  * @email solong1980@163.com
  * @date 2017-06-24 11:19:40
  */
-public interface MaterialTagsService {
+public interface MaterialTagService {
 	
-	MaterialTagsEntity queryObject(Long id);
+	MaterialTagEntity queryObject(Long id);
 	
-	List<MaterialTagsEntity> queryList(Map<String, Object> map);
+	List<MaterialTagEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
 	
-	void save(MaterialTagsEntity materialTags);
+	void save(MaterialTagEntity materialTag);
 	
-	void update(MaterialTagsEntity materialTags);
+	void update(MaterialTagEntity materialTag);
 	
 	void delete(Long id);
 	

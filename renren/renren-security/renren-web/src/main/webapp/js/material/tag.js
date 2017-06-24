@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '../materialtags/list',
+        url: '../materialtag/list',
         datatype: "json",
         colModel: [
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
@@ -47,7 +47,7 @@ var vm = new Vue({
 		},
 		showList: true,
 		title: null,
-		materialTags: {}
+		materialTag: {}
 	},
 	methods: {
 		query: function () {
@@ -56,7 +56,7 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.materialTags = {};
+			vm.materialTag = {};
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -69,12 +69,12 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.materialTags.id == null ? "../materialtags/save" : "../materialtags/update";
+			var url = vm.materialTag.id == null ? "../materialtag/save" : "../materialtag/update";
 			$.ajax({
 				type: "POST",
 			    url: url,
 			    contentType: "application/json",
-			    data: JSON.stringify(vm.materialTags),
+			    data: JSON.stringify(vm.materialTag),
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(index){
@@ -95,7 +95,8 @@ var vm = new Vue({
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: "../materialtags/delete",
+				    url: "../materialtag/delete",
+				    contentType: "application/json",
 				    data: JSON.stringify(ids),
 				    success: function(r){
 						if(r.code == 0){
@@ -110,8 +111,8 @@ var vm = new Vue({
 			});
 		},
 		getInfo: function(id){
-			$.get("../materialtags/info/"+id, function(r){
-                vm.materialTags = r.materialTags;
+			$.get("../materialtag/info/"+id, function(r){
+                vm.materialTag = r.materialTag;
             });
 		},
 		reload: function (event) {

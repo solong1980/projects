@@ -11,31 +11,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.renren.entity.KeywordsEntity;
-import io.renren.service.KeywordsService;
+import io.renren.entity.KeywordEntity;
+import io.renren.service.KeywordService;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
 import io.renren.utils.R;
 
 @RestController
-@RequestMapping("keywords")
-public class KeywordsController {
+@RequestMapping("keyword")
+public class KeywordController {
 	@Autowired
-	private KeywordsService keywordsService;
+	private KeywordService keywordService;
 
 	/**
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("keywords:list")
+	@RequiresPermissions("keyword:list")
 	public R list(@RequestParam Map<String, Object> params) {
 		// 查询列表数据
 		Query query = new Query(params);
 
-		List<KeywordsEntity> keywordsList = keywordsService.queryList(query);
-		int total = keywordsService.queryTotal(query);
+		List<KeywordEntity> keywordList = keywordService.queryList(query);
+		int total = keywordService.queryTotal(query);
 
-		PageUtils pageUtil = new PageUtils(keywordsList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(keywordList, total, query.getLimit(), query.getPage());
 
 		return R.ok().put("page", pageUtil);
 	}
@@ -44,20 +44,20 @@ public class KeywordsController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("keywords:info")
+	@RequiresPermissions("keyword:info")
 	public R info(@PathVariable("id") Long id) {
-		KeywordsEntity keywords = keywordsService.queryObject(id);
+		KeywordEntity keyword = keywordService.queryObject(id);
 
-		return R.ok().put("keywords", keywords);
+		return R.ok().put("keyword", keyword);
 	}
 
 	/**
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("keywords:save")
-	public R save(@RequestBody KeywordsEntity keywords) {
-		keywordsService.save(keywords);
+	@RequiresPermissions("keyword:save")
+	public R save(@RequestBody KeywordEntity keyword) {
+		keywordService.save(keyword);
 
 		return R.ok();
 	}
@@ -66,9 +66,9 @@ public class KeywordsController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("keywords:update")
-	public R update(@RequestBody KeywordsEntity keywords) {
-		keywordsService.update(keywords);
+	@RequiresPermissions("keyword:update")
+	public R update(@RequestBody KeywordEntity keyword) {
+		keywordService.update(keyword);
 
 		return R.ok();
 	}
@@ -77,9 +77,9 @@ public class KeywordsController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("keywords:delete")
+	@RequiresPermissions("keyword:delete")
 	public R delete(@RequestBody Long[] ids) {
-		keywordsService.deleteBatch(ids);
+		keywordService.deleteBatch(ids);
 
 		return R.ok();
 	}

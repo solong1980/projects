@@ -9,7 +9,7 @@ import java.util.Date;
  * @email solong1980@163.com
  * @date 2017-06-23 19:10:33
  */
-public class AttachmentsEntity extends BaseEntity {
+public class AttachmentEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	// 素材id

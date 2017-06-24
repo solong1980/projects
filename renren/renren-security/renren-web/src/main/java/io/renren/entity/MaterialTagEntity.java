@@ -8,7 +8,7 @@ package io.renren.entity;
  * @email solong1980@163.com
  * @date 2017-06-24 11:19:40
  */
-public class MaterialTagsEntity extends BaseEntity {
+public class MaterialTagEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	// 标签名字

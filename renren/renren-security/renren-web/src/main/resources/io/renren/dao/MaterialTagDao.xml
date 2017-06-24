@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.renren.dao.KeywordsDao">
+<mapper namespace="io.renren.dao.MaterialTagDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="io.renren.entity.KeywordsEntity" id="keywordsMap">
+    <resultMap type="io.renren.entity.MaterialTagEntity" id="materialTagMap">
         <result property="id" column="id"/>
-        <result property="keyword" column="keyword"/>
-        <result property="description" column="description"/>
+        <result property="tagName" column="tag_name"/>
+        <result property="tagDescription" column="tag_description"/>
         <result property="status" column="status"/>
         <result property="createrId" column="creater_id"/>
         <result property="createTime" column="create_time"/>
@@ -15,12 +15,12 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
-	<select id="queryObject" resultType="io.renren.entity.KeywordsEntity">
-		select * from t_keywords where id = #{value}
+	<select id="queryObject" resultType="io.renren.entity.MaterialTagEntity">
+		select * from t_material_tag where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="io.renren.entity.KeywordsEntity">
-		select * from t_keywords
+	<select id="queryList" resultType="io.renren.entity.MaterialTagEntity">
+		select * from t_material_tag
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -35,14 +35,14 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from t_keywords 
+		select count(*) from t_material_tag 
 	</select>
 	 
-	<insert id="save" parameterType="io.renren.entity.KeywordsEntity" useGeneratedKeys="true" keyProperty="id">
-		insert into t_keywords
+	<insert id="save" parameterType="io.renren.entity.MaterialTagEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into t_material_tag
 		(
-			`keyword`, 
-			`description`, 
+			`tag_name`, 
+			`tag_description`, 
 			`status`, 
 			`creater_id`, 
 			`create_time`, 
@@ -51,8 +51,8 @@
 		)
 		values
 		(
-			#{keyword}, 
-			#{description}, 
+			#{tagName}, 
+			#{tagDescription}, 
 			#{status}, 
 			#{createrId}, 
 			#{createTime}, 
@@ -61,11 +61,11 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="io.renren.entity.KeywordsEntity">
-		update t_keywords 
+	<update id="update" parameterType="io.renren.entity.MaterialTagEntity">
+	update t_material_tag 
 		<set>
-			<if test="keyword != null">`keyword` = #{keyword}, </if>
-			<if test="description != null">`description` = #{description}, </if>
+			<if test="tagName != null">`tag_name` = #{tagName}, </if>
+			<if test="tagDescription != null">`tag_description` = #{tagDescription}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="createrId != null">`creater_id` = #{createrId}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
@@ -76,11 +76,11 @@
 	</update>
 	
 	<delete id="delete">
-		delete from t_keywords where id = #{value}
+		delete from t_material_tag where id = #{value}
 	</delete>
 	
 	<delete id="deleteBatch">
-		delete from t_keywords where id in 
+	delete from t_material_tag where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

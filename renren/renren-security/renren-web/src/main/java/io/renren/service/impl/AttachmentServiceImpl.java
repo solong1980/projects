@@ -1,8 +1,8 @@
 package io.renren.service.impl;
 
-import io.renren.dao.AttachmentsDao;
-import io.renren.entity.AttachmentsEntity;
-import io.renren.service.AttachmentsService;
+import io.renren.dao.AttachmentDao;
+import io.renren.entity.AttachmentEntity;
+import io.renren.service.AttachmentService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,47 +16,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service("attachmentsService")
-public class AttachmentsServiceImpl implements AttachmentsService {
+@Service("attachmentService")
+public class AttachmentServiceImpl implements AttachmentService {
 
-	private static Logger logger = LoggerFactory.getLogger(AttachmentsServiceImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(AttachmentServiceImpl.class);
 
 	@Autowired
-	private AttachmentsDao attachmentsDao;
+	private AttachmentDao attachmentDao;
 
 	@Override
-	public AttachmentsEntity queryObject(Long id) {
-		return attachmentsDao.queryObject(id);
+	public AttachmentEntity queryObject(Long id) {
+		return attachmentDao.queryObject(id);
 	}
 
 	@Override
-	public List<AttachmentsEntity> queryList(Map<String, Object> map) {
-		return attachmentsDao.queryList(map);
+	public List<AttachmentEntity> queryList(Map<String, Object> map) {
+		return attachmentDao.queryList(map);
 	}
 
 	@Override
 	public int queryTotal(Map<String, Object> map) {
-		return attachmentsDao.queryTotal(map);
+		return attachmentDao.queryTotal(map);
 	}
 
 	@Override
-	public void save(AttachmentsEntity attachments) {
-		attachmentsDao.save(attachments);
+	public void save(AttachmentEntity attachment) {
+		attachmentDao.save(attachment);
 	}
 
 	@Override
-	public void update(AttachmentsEntity attachments) {
-		attachmentsDao.update(attachments);
+	public void update(AttachmentEntity attachment) {
+		attachmentDao.update(attachment);
 	}
 
 	@Override
 	public void delete(Long id) {
-		attachmentsDao.delete(id);
+		attachmentDao.delete(id);
 	}
 
 	@Override
 	public void deleteBatch(Long[] ids) {
-		attachmentsDao.deleteBatch(ids);
+		attachmentDao.deleteBatch(ids);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class AttachmentsServiceImpl implements AttachmentsService {
 				File serverFile = new File(dir.getAbsolutePath() + File.separator + file.getOriginalFilename());
 				file.transferTo(serverFile);
 
-				AttachmentsEntity attachment = new AttachmentsEntity();
+				AttachmentEntity attachment = new AttachmentEntity();
 
 				String originalFilename = file.getOriginalFilename();
 				String fileSavedPath = serverFile.getPath();

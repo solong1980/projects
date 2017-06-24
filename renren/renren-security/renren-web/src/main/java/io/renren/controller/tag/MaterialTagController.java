@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.renren.annotation.SysLog;
-import io.renren.entity.MaterialTagsEntity;
-import io.renren.service.MaterialTagsService;
+import io.renren.entity.MaterialTagEntity;
+import io.renren.service.MaterialTagService;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
 import io.renren.utils.R;
@@ -27,22 +27,22 @@ import io.renren.utils.ShiroUtils;
  * @date 2017-06-24 11:19:40
  */
 @RestController
-@RequestMapping("materialtags")
-public class MaterialTagsController {
+@RequestMapping("materialtag")
+public class MaterialTagController {
 	@Autowired
-	private MaterialTagsService materialTagsService;
+	private MaterialTagService materialTagService;
 
 	/**
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("materialtags:list")
+	@RequiresPermissions("materialtag:list")
 	public R list(@RequestParam Map<String, Object> params) {
 		// 查询列表数据
 		Query query = new Query(params);
 
-		List<MaterialTagsEntity> materialTagsList = materialTagsService.queryList(query);
-		int total = materialTagsService.queryTotal(query);
+		List<MaterialTagEntity> materialTagsList = materialTagService.queryList(query);
+		int total = materialTagService.queryTotal(query);
 
 		PageUtils pageUtil = new PageUtils(materialTagsList, total, query.getLimit(), query.getPage());
 
@@ -53,25 +53,25 @@ public class MaterialTagsController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("materialtags:info")
+	@RequiresPermissions("materialtag:info")
 	public R info(@PathVariable("id") Long id) {
-		MaterialTagsEntity materialTags = materialTagsService.queryObject(id);
+		MaterialTagEntity materialTag = materialTagService.queryObject(id);
 
-		return R.ok().put("materialTags", materialTags);
+		return R.ok().put("materialTag", materialTag);
 	}
 
 	/**
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("materialtags:save")
+	@RequiresPermissions("materialtag:save")
 	@SysLog("save material tag")
-	public R save(@RequestBody MaterialTagsEntity materialTags) {
-		
-		materialTags.setCreaterId(ShiroUtils.getUserId());
-		materialTags.setCreateTime(MaterialTagsEntity.getFastDate());
-		
-		materialTagsService.save(materialTags);
+	public R save(@RequestBody MaterialTagEntity materialTag) {
+
+		materialTag.setCreaterId(ShiroUtils.getUserId());
+		materialTag.setCreateTime(MaterialTagEntity.getFastDate());
+
+		materialTagService.save(materialTag);
 
 		return R.ok();
 	}
@@ -80,9 +80,9 @@ public class MaterialTagsController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("materialtags:update")
-	public R update(@RequestBody MaterialTagsEntity materialTags) {
-		materialTagsService.update(materialTags);
+	@RequiresPermissions("materialtag:update")
+	public R update(@RequestBody MaterialTagEntity materialTag) {
+		materialTagService.update(materialTag);
 
 		return R.ok();
 	}
@@ -91,9 +91,9 @@ public class MaterialTagsController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("materialtags:delete")
+	@RequiresPermissions("materialtag:delete")
 	public R delete(@RequestBody Long[] ids) {
-		materialTagsService.deleteBatch(ids);
+		materialTagService.deleteBatch(ids);
 
 		return R.ok();
 	}

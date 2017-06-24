@@ -7,7 +7,7 @@ package io.renren.entity;
  * @email solong1980@163.com
  * @date 2017-06-24 13:21:40
  */
-public class KeywordsEntity extends BaseEntity {
+public class KeywordEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	// 关键字

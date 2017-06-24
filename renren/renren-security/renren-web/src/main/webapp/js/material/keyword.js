@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '../keywords/list',
+        url: '../keyword/list',
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
@@ -47,7 +47,7 @@ var vm = new Vue({
 		},
 		showList: true,
 		title: null,
-		keywords: {}
+		keyword: {}
 	},
 	methods: {
 		query: function () {
@@ -56,7 +56,7 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.keywords = {};
+			vm.keyword = {};
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -69,12 +69,12 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.keywords.id == null ? "../keywords/save" : "../keywords/update";
+			var url = vm.keyword.id == null ? "../keyword/save" : "../keyword/update";
 			$.ajax({
 				type: "POST",
 			    url: url,
 			    contentType: "application/json",
-			    data: JSON.stringify(vm.keywords),
+			    data: JSON.stringify(vm.keyword),
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(index){
@@ -95,7 +95,7 @@ var vm = new Vue({
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: "../keywords/delete",
+				    url: "../keyword/delete",
 				    contentType: "application/json",
 				    data: JSON.stringify(ids),
 				    success: function(r){
@@ -111,8 +111,8 @@ var vm = new Vue({
 			});
 		},
 		getInfo: function(id){
-			$.get("../keywords/info/"+id, function(r){
-                vm.keywords = r.keywords;
+			$.get("../keyword/info/"+id, function(r){
+                vm.keyword = r.keyword;
             });
 		},
 		reload: function (event) {

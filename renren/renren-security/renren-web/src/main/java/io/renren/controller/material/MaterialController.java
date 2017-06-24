@@ -2,15 +2,14 @@ package io.renren.controller.material;
 
 import io.renren.annotation.SysLog;
 import io.renren.controller.AbstractController;
-import io.renren.entity.MaterialsEntity;
-import io.renren.service.MaterialsService;
+import io.renren.entity.MaterialEntity;
+import io.renren.service.MaterialService;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
 import io.renren.utils.R;
 import io.renren.utils.ShiroUtils;
 import io.renren.validator.ValidatorUtils;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/material/manager")
+@RequestMapping("material")
 public class MaterialController extends AbstractController {
 
 	public MaterialController() {
@@ -39,61 +38,61 @@ public class MaterialController extends AbstractController {
 	}
 
 	@Autowired
-	private MaterialsService materialsService;
+	private MaterialService materialService;
 
 	@RequestMapping("/list")
-	@RequiresPermissions("material:manager:list")
+	@RequiresPermissions("material:list")
 	public R list(@RequestParam Map<String, Object> params) {
 		// 查询列表数据
 		Query query = new Query(params);
-		List<MaterialsEntity> materialsList = materialsService.queryList(query);
-		int total = materialsService.queryTotal(query);
+		List<MaterialEntity> materialList = materialService.queryList(query);
+		int total = materialService.queryTotal(query);
 
-		PageUtils pageUtil = new PageUtils(materialsList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(materialList, total, query.getLimit(), query.getPage());
 
 		return R.ok().put("page", pageUtil);
 	}
 
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("material:manager:info")
+	@RequiresPermissions("material:info")
 	public R info(@PathVariable("id") Long id) {
-		MaterialsEntity materials = materialsService.queryObject(id);
-		return R.ok().put("materials", materials);
+		MaterialEntity material = materialService.queryObject(id);
+		return R.ok().put("material", material);
 	}
 
 	@SysLog("保存素材")
 	@RequestMapping("/save")
-	@RequiresPermissions("material:manager:save")
-	public R save(@RequestBody MaterialsEntity materials) {
+	@RequiresPermissions("material:save")
+	public R save(@RequestBody MaterialEntity material) {
 		Long userId = ShiroUtils.getUserId();
 
-		materials.setCreateTime(MaterialsEntity.getFastDate());
-		materials.setCreaterId(userId);
-		
-		ValidatorUtils.validateEntity(materials);
-		materialsService.saveAndWriteBackFileId(materials);
+		material.setCreateTime(MaterialEntity.getFastDate());
+		material.setCreaterId(userId);
+
+		ValidatorUtils.validateEntity(material);
+		materialService.saveAndWriteBackFileId(material);
 		return R.ok();
 	}
 
 	@SysLog("修改素材")
 	@RequestMapping("/update")
-	@RequiresPermissions("material:manager:update")
-	public R update(@RequestBody MaterialsEntity materials) {
+	@RequiresPermissions("material:update")
+	public R update(@RequestBody MaterialEntity material) {
 		Long userId = ShiroUtils.getUserId();
 
-		materials.setUpdateTime(MaterialsEntity.getFastDate());
-		materials.setUpdaterId(userId);
+		material.setUpdateTime(MaterialEntity.getFastDate());
+		material.setUpdaterId(userId);
 
-		ValidatorUtils.validateEntity(materials);
-		materialsService.update(materials);
+		ValidatorUtils.validateEntity(material);
+		materialService.update(material);
 		return R.ok();
 	}
 
 	@SysLog("删除素材")
 	@RequestMapping("/delete")
-	@RequiresPermissions("material:manager:delete")
+	@RequiresPermissions("material:delete")
 	public R delete(@RequestBody Long[] ids) {
-		materialsService.deleteBatch(ids);
+		materialService.deleteBatch(ids);
 
 		return R.ok();
 	}

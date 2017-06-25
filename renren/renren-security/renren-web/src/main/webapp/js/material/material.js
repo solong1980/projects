@@ -33,7 +33,7 @@ $(function () {
 			{ label: '更新时间', name: 'updateTime', width: 80 }
         ],
 		viewrecords: true,
-        height: 385,
+		height:'auto',
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 
@@ -41,6 +41,8 @@ $(function () {
         autowidth:true,
         multiselect: true,
         pager: "#jqGridPager",
+        shrinkToFit:false,   
+        autoScroll: true,
         jsonReader : {
             root: "page.list",
             page: "page.currPage",
@@ -54,11 +56,10 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "scroll" }); 
         }
     });
 });
-
 /*
  new Vue({
 	el : '#app',

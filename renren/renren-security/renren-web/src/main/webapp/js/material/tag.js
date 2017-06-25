@@ -13,7 +13,7 @@ $(function () {
 			{ label: '更新时间', name: 'updateTime', index: 'update_time', width: 80 }			
         ],
 		viewrecords: true,
-        height: 385,
+        height: 'auto',
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 
@@ -21,6 +21,8 @@ $(function () {
         autowidth:true,
         multiselect: true,
         pager: "#jqGridPager",
+        shrinkToFit:false,   
+        autoScroll: true,
         jsonReader : {
             root: "page.list",
             page: "page.currPage",

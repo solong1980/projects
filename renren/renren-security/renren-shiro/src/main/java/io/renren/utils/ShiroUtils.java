@@ -1,6 +1,7 @@
 package io.renren.utils;
 
 import io.renren.entity.SysUserEntity;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -23,13 +24,13 @@ public class ShiroUtils {
 	}
 
 	public static SysUserEntity getUserEntity() {
-		return (SysUserEntity)SecurityUtils.getSubject().getPrincipal();
+		return (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
 	}
 
 	public static Long getUserId() {
 		return getUserEntity().getUserId();
 	}
-	
+
 	public static void setSessionAttribute(Object key, Object value) {
 		getSession().setAttribute(key, value);
 	}
@@ -45,7 +46,7 @@ public class ShiroUtils {
 	public static void logout() {
 		SecurityUtils.getSubject().logout();
 	}
-	
+
 	public static String getKaptcha(String key) {
 		String kaptcha = getSessionAttribute(key).toString();
 		getSession().removeAttribute(key);

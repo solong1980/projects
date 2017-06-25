@@ -27,4 +27,6 @@ public interface MaterialTagService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+	List<MaterialTagEntity> doSearch(Map<String, Object> map);
 }

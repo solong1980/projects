@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
-
-
 
 /**
  * 用户与角色对应关系
@@ -25,15 +24,16 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
 	private SysUserRoleDao sysUserRoleDao;
 
 	@Override
+	@CacheEvict(cacheNames = "io.renren.shiro.UserRealm.authorizationCache", key = "#userId")
 	public void saveOrUpdate(Long userId, List<Long> roleIdList) {
-		if(roleIdList.size() == 0){
-			return ;
+		if (roleIdList.size() == 0) {
+			return;
 		}
-		
-		//先删除用户与角色关系
+
+		// 先删除用户与角色关系
 		sysUserRoleDao.delete(userId);
-		
-		//保存用户与角色关系
+
+		// 保存用户与角色关系
 		Map<String, Object> map = new HashMap<>();
 		map.put("userId", userId);
 		map.put("roleIdList", roleIdList);
@@ -46,6 +46,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
 	}
 
 	@Override
+	@CacheEvict(cacheNames = "io.renren.shiro.UserRealm.authorizationCache", key = "#userId")
 	public void delete(Long userId) {
 		sysUserRoleDao.delete(userId);
 	}

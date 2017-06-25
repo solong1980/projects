@@ -1,14 +1,28 @@
 $(function () {
+	function statusFormat( cellvalue, options, rowObject ){
+		if(cellvalue==0)return '未发布';
+		if(cellvalue==1)return '已发布';
+		return '未知';
+	}
+	function typeFormat( cellvalue, options, rowObject ){
+		if(cellvalue==10)return '图片';
+		if(cellvalue==20)return '视频';
+		if(cellvalue==30)return '音频';
+		if(cellvalue==40)return '字体';
+		if(cellvalue==50)return '挂件';
+		if(cellvalue==60)return '滤镜';
+		return '未知';
+	}
     $("#jqGrid").jqGrid({
         url: '../material/list',
         datatype: "json",
         colModel: [			
 			{ label: 'ID', name: 'id', width: 30, key: true },
-			{ label: '状态', name: 'status', width: 60 },
+			{ label: '状态', name: 'status', formatter:statusFormat, width: 60 },
 			{ label: '素材名称', name: 'name', width: 100 },
 			{ label: '标签ID', name: 'tagIds', width: 80 },
 			{ label: '关键词ID', name: 'keywordIds', width: 60 },
-			{ label: '类型', name: 'type', width: 100 },
+			{ label: '类型', name: 'type', formatter:typeFormat, width: 100 },
 			{ label: '编者ID', name: 'makerid', width: 80 },
 			{ label: '编者', name: 'maker', width: 60 },
 			{ label: '上传文件数', name: 'fileCount', width: 100 },
@@ -45,6 +59,50 @@ $(function () {
     });
 });
 
+/*
+ new Vue({
+	el : '#app',
+	data : function() {
+		return {
+			visible : false
+		}
+	}
+})
+var tagVm = new Vue({
+	el : '#tagsapp',
+	data : function() {
+		return 
+	},
+	mounted : function() {
+		debugger
+	    this.list = this.states.map(function(item,index) {
+	        return { value: index, label: item };
+	    });
+	},
+	methods: {
+		onInput : function () {
+			debugger
+			//this.$emit('tagIds', this.tagIds);
+	        //if (this.tagIds.trim()) {
+	        //}
+	    },
+		remoteMethod : function(query) {
+			debugger
+			if (query !== '') {
+				tagVm.loading = true;
+				setTimeout(function(){
+					tagVm.loading = false;
+					tagVm.tags = this.list.filter(function(item) {
+						return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+					});
+				}, 200);
+	        } else {
+	        	tagVm.tags = [];
+	        }
+		}
+	}
+})*/
+
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
@@ -53,7 +111,19 @@ var vm = new Vue({
 		},
 		showList: true,
 		title: null,
-		material: {}
+		material: {
+		},
+		tagapp:{
+			tagIds:[],
+			tags: [],
+	        loading: false
+		}
+	},
+	mounted : function() {
+		this.tagapp.tagIds = this.material.tagIds||[];
+	    this.tagapp.tags = this.tagapp.tagIds.map(function(item,index) {
+	        return { value: index, label: item };
+	    });
 	},
 	methods: {
 		query: function () {
@@ -63,9 +133,11 @@ var vm = new Vue({
 			vm.showList = false;
 			vm.title = "新增";
 			vm.material = {};
+			//消除类型radio已有的选择,共用一个form表单导致
+			var typeCheckedRadioEls = $("div .btn-group > div[class='radio'] > ins[class='checked']");
+			typeCheckedRadioEls.trigger("click");
 		},
 		update: function () {
-			debugger
 			var id = getSelectedRow();
 			if(id == null){
 				return ;
@@ -74,16 +146,23 @@ var vm = new Vue({
 			$.get("../material/info/"+id, function(r){
                 vm.showList = false;
                 vm.title = "修改";
-                vm.material = r.material;
+                var material = r.material;
+                vm.material = material;
+                var type = material.type;
+                //$("div .btn-group > div[class='radio'][value=60]")
+                var typeRadioEl = $("div .btn-group > div[class='radio'][value="+type+"]");
+                typeRadioEl.trigger("click");
             });
 		},
 		appendAttachmentIds:function(attachmentIds){
 			if(!vm.material.attachments){
 				vm.material.attachments = [];
+				vm.material.fileCount = 0;
 			}
 			$.each(attachmentIds,function(index,item){
 				vm.material.attachments.push({id:item});
 			})
+			vm.material.fileCount = vm.material.attachments.length;
 		},
 		updateMaterialType:function(type){
 			vm.material.type = type;
@@ -93,7 +172,6 @@ var vm = new Vue({
 			if(ids == null){
 				return ;
 			}
-			
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
@@ -114,6 +192,7 @@ var vm = new Vue({
 		},
 		saveOrUpdate: function (event) {
 			var url = vm.material.id == null ? "../material/save" : "../material/update";
+			vm.material.tagIds = vm.tagapp.tagIds.join(",");
 			$.ajax({
 				type: "POST",
 			    url: url,
@@ -137,6 +216,38 @@ var vm = new Vue({
                 postData:{'key': vm.q.key},
                 page:page
             }).trigger("reloadGrid");
-		}
+		},
+		onTagInput : function () {
+			//this.$emit('tagIds', this.tagIds);
+	        //if (this.tagIds.trim()) {
+	        //}
+	    },
+		tagRemoteMethod : function(query) {
+			if (query !== '' && query.length>1) {
+				vm.tagapp.loading = true;
+				setTimeout(function(){
+					vm.tagapp.loading = false;
+					vm.loadTags(query.toLowerCase());
+				}, 200);
+	        } else {
+	        	vm.tagapp.tags = [];
+	        }
+		},
+	    loadTags : function(q){
+	    	$.ajax({
+				type: "GET",
+			    url: "../materialtag/search?key="+q,
+			    success: function(r){
+			    	debugger
+					if(r.code == 0){
+						vm.tagapp.tags = r.list.map(function(item){
+							return { value: item.id, label: item.tagName };
+						});
+					}else{
+						alert(r.msg);
+					}
+				}
+			});
+	    }
 	}
 });

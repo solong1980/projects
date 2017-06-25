@@ -33,6 +33,17 @@ public class MaterialTagController {
 	private MaterialTagService materialTagService;
 
 	/**
+	 * 模糊查询
+	 */
+	@RequestMapping("/search")
+	@RequiresPermissions("materialtag:search")
+	public R search(@RequestParam Map<String, Object> params) {
+		// 模糊查询
+		List<MaterialTagEntity> materialTagsList = materialTagService.doSearch(params);
+		return R.ok().put("list", materialTagsList);
+	}
+
+	/**
 	 * 列表
 	 */
 	@RequestMapping("/list")

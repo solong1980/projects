@@ -9,6 +9,7 @@
 		<param-value>
 			classpath:spring-mvc.xml
 			classpath:spring-jdbc.xml
+			classpath:renren-shiro-cache.xml
 			classpath:renren-shiro.xml
 			classpath:renren-api.xml
 			classpath:renren-rop.xml

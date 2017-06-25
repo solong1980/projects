@@ -24,6 +24,10 @@ public class MaterialTagServiceImpl implements MaterialTagService {
 	public List<MaterialTagEntity> queryList(Map<String, Object> map) {
 		return materialTagDao.queryList(map);
 	}
+	@Override
+	public List<MaterialTagEntity> doSearch(Map<String, Object> map) {
+		return materialTagDao.doSearch(map);
+	}
 
 	@Override
 	public int queryTotal(Map<String, Object> map) {

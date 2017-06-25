@@ -4,13 +4,20 @@
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
-
+        
 	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的UserRealm.java -->  
-	<bean id="userRealm" class="io.renren.shiro.UserRealm"/>
+	<bean id="userRealm" class="io.renren.shiro.UserRealm">
+		<constructor-arg index="0" name="cacheManager" ref="shiroSpringCacheManager"/>
+	</bean>
+
+    <!-- 用户授权信息Cache, 采用spring-cache, 具体请查看spring-ehcache.xml、spring-redis.xml -->
+    <bean id="shiroSpringCacheManager" class="io.renren.shiro.cache.ShiroSpringCacheManager">
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
 
 	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-		<!-- 设置session过期时间为1小时(单位：毫秒)，默认为30分钟 -->
-		<property name="globalSessionTimeout" value="3600000"></property>
+		<!-- 设置session过期时间为1小时(单位：毫秒)，默认为60分钟 -->
+		<property name="globalSessionTimeout" value="#{60 * 60 * 1000}"></property>
 		<property name="sessionValidationSchedulerEnabled" value="true"></property>
 		<property name="sessionIdUrlRewritingEnabled" value="false"></property>
 	</bean>
@@ -20,6 +27,8 @@
 	<!-- 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->  
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="sessionManager" ref="sessionManager"></property>
+		<!--将缓存管理器，交给安全管理器-->
+        <property name="cacheManager" ref="shiroSpringCacheManager"/>
 	    <property name="realm" ref="userRealm"/>
 	</bean>
 

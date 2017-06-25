@@ -34,7 +34,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--Shiro过滤器-->
+    <!--Shiro过滤器
     <filter>
         <filter-name>shiroFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -49,8 +49,8 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-
-    <!--Rop框架请求捕获-->
+-->
+    <!--Rop框架请求捕获
     <servlet>
         <servlet-name>rop</servlet-name>
         <servlet-class>
@@ -63,7 +63,7 @@
         <servlet-name>rop</servlet-name>
         <url-pattern>/router/rop</url-pattern>
     </servlet-mapping>
-    
+    -->
     <!-- springmvc 控制器 -->
     <servlet>
         <servlet-name>spring-mvc</servlet-name>

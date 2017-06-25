@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 import com.rop.AbstractRopRequest;
-import com.rop.annotation.NeedInSessionType;
 
 @SuppressWarnings("serial")
 public class BaseRopRequest extends AbstractRopRequest implements Serializable {

@@ -2,6 +2,7 @@ package com.yz.boster.rop.request;
 
 import com.yz.boster.rop.BaseRopRequest;
 
+@SuppressWarnings("serial")
 public class PageQueryRequest extends BaseRopRequest {
 
 	protected Integer offset = 0;

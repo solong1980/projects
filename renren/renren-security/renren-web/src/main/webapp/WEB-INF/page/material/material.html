@@ -16,6 +16,9 @@
 .el-select{
 	width: 100%
 }
+button.close{
+	padding: 10px;
+}
 </style>
 </head>
 <body>
@@ -94,12 +97,12 @@
 			<div class="form-group">
 			   	<div class="col-sm-2 control-label">标签:</div>
 			   	<div class="col-sm-10">
-					<el-select v-model="tagapp.tagIds" multiple filterable="" remote placeholder="请输入关键词" :remote-method="tagRemoteMethod" :loading="tagapp.loading">
+					<el-select v-model="tagapp.tagIds" multiple filterable="" remote placeholder="请输入标签" :remote-method="tagRemoteMethod" :loading="tagapp.loading">
 						<el-option v-for="item in tagapp.tags" :key="item.value" :label="item.label" :value="item.value">
 					    </el-option>
 					</el-select>
 			    </div>
-<!-- 			    <div class="col-sm-5">
+			<!-- <div class="col-sm-5">
 			    	<input type="text" class="form-control" v-model="material.tagIds" placeholder="标签"/>
 			    </div> -->
 			</div>
@@ -107,7 +110,8 @@
 			   	<div class="col-sm-2 control-label">文件:</div>
 			   	<div class="wraper col-sm-10">
 					<p id="drag-area">把要上传的文件拖放到这里(请使用支持html5的浏览器)</p>
-					<ul id="file-list"></ul>
+					<ul id="file-list">
+					</ul>
 					<div id="attachment_list" class="btn-wraper">
 					<input type="button" value="选择文件..." id="browse" />
 					<input type="button" value="开始上传" id="upload-btn" />

@@ -44,6 +44,17 @@ public class MaterialTagController {
 	}
 
 	/**
+	 * 根据ids查询
+	 */
+	@RequestMapping("/queryByIds")
+	//@RequiresPermissions("materialtag:queryByIds")
+	public R queryByIds(@RequestBody Long[] ids) {
+		// 查询列表数据
+		List<MaterialTagEntity> materialTagsList = materialTagService.queryByIds(ids);
+		return R.ok().put("materialTags", materialTagsList);
+	}
+	
+	/**
 	 * 列表
 	 */
 	@RequestMapping("/list")

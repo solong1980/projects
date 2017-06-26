@@ -54,4 +54,9 @@ public class MaterialTagServiceImpl implements MaterialTagService {
 		materialTagDao.deleteBatch(ids);
 	}
 
+	@Override
+	public List<MaterialTagEntity> queryByIds(Long[] ids) {
+		return materialTagDao.queryByIds(ids);
+	}
+
 }

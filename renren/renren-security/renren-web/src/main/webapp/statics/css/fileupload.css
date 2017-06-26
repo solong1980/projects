@@ -25,6 +25,8 @@
 }
 
 .progress {
+	margin: 0 auto 0 5px;
+	display:inline-block;
 	height: 4px;
 	font-size: 0;
 	line-height: 4px;

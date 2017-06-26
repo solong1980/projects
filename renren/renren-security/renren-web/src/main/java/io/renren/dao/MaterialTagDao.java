@@ -3,6 +3,8 @@ package io.renren.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import io.renren.entity.MaterialTagEntity;
 
 /**
@@ -14,4 +16,6 @@ import io.renren.entity.MaterialTagEntity;
  */
 public interface MaterialTagDao extends BaseDao<MaterialTagEntity> {
 	List<MaterialTagEntity> doSearch(Map<String, Object> map);
+
+	List<MaterialTagEntity> queryByIds(@Param("list") Long[] ids);
 }

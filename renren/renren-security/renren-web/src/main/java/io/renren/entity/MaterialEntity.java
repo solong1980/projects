@@ -20,7 +20,7 @@ public class MaterialEntity extends BaseEntity {
 	private Integer fileCount;
 	private String description;
 
-	// 存放临时文件ID,","连接
+	// 文件实体
 	private AttachmentEntity[] attachments;
 
 	public void setStatus(Integer status) {

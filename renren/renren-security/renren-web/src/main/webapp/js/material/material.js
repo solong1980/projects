@@ -112,6 +112,7 @@ var vm = new Vue({
 		},
 		showList: true,
 		title: null,
+		fileItems:{},
 		material: {
 		},
 		tagapp:{
@@ -137,6 +138,9 @@ var vm = new Vue({
 			//消除类型radio已有的选择,共用一个form表单导致
 			var typeCheckedRadioEls = $("div .btn-group > div[class='radio'] > ins[class='checked']");
 			typeCheckedRadioEls.trigger("click");
+			//新增置空tag控件数据
+			vm.tagapp.tags = [];
+			vm.tagapp.tagIds = [];
 		},
 		update: function () {
 			var id = getSelectedRow();
@@ -150,18 +154,45 @@ var vm = new Vue({
                 var material = r.material;
                 vm.material = material;
                 var type = material.type;
+                debugger
+                //获取tag信息,设置标签控件
+                $.ajax({
+    				type: "POST",
+    			    url: "../materialtag/queryByIds",
+    			    sync: true,
+    			    contentType: "application/json",
+    			    data : JSON.stringify(material.tagIds.split(",")),
+    			    success: function(r){
+    			    	debugger
+    					if(r.code == 0){
+    						vm.tagapp.tags = r.materialTags.map(function(item){
+    							return { value: item.id, label: item.tagName };
+    						});
+    						
+    						vm.tagapp.tagIds = r.materialTags.map(function(item){
+    							return item.id;
+    						});
+    						
+    					}else{
+    						alert(r.msg);
+    					}
+    				}
+    			});
+                
+                //设置类型icheck控件
                 //$("div .btn-group > div[class='radio'][value=60]")
                 var typeRadioEl = $("div .btn-group > div[class='radio'][value="+type+"]");
                 typeRadioEl.trigger("click");
             });
 		},
-		appendAttachmentIds:function(attachmentIds){
+		appendAttachmentIds:function(fileId,attachmentIds/**数组只有一个元素 */){
 			if(!vm.material.attachments){
 				vm.material.attachments = [];
 				vm.material.fileCount = 0;
 			}
 			$.each(attachmentIds,function(index,item){
 				vm.material.attachments.push({id:item});
+				vm.fileItems[fileId] = item;
 			})
 			vm.material.fileCount = vm.material.attachments.length;
 		},
@@ -239,7 +270,6 @@ var vm = new Vue({
 				type: "GET",
 			    url: "../materialtag/search?key="+q,
 			    success: function(r){
-			    	debugger
 					if(r.code == 0){
 						vm.tagapp.tags = r.list.map(function(item){
 							return { value: item.id, label: item.tagName };

@@ -38,6 +38,13 @@
 		select * from t_material_tag where tag_name like concat('%',#{key},'%') order by tag_name limit 0, 100
 	</select>
 	
+	<select id="queryByIds" resultType="io.renren.entity.MaterialTagEntity">
+		select * from t_material_tag where id in 
+		<foreach collection="list" separator="," open="("  close=")" item="id">
+			#{id}
+		</foreach>
+	</select>
+	
  	<select id="queryTotal" resultType="int">
 		select count(*) from t_material_tag 
 	</select>

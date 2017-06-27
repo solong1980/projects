@@ -34,4 +34,22 @@
 	width: 0;
 }
 
-#drag-area{ border: 1px solid #ccc; height: 80px; line-height: 80px; text-align: center; color: #aaa; width: 100%; margin: 10px auto;}
+.progress-text {
+	margin: 0 auto 0 5px;
+	display:inline-block;
+	height: 24px;
+	font-size: 12px;
+	line-height: 28px;
+	background: orange;
+	width: 40px;
+}
+
+#drag-area {
+	border: 1px solid #ccc;
+	height: 80px;
+	line-height: 80px;
+	text-align: center;
+	color: #aaa;
+	width: 100%;
+	margin: 10px auto;
+}

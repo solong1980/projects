@@ -141,6 +141,10 @@ var vm = new Vue({
 			//新增置空tag控件数据
 			vm.tagapp.tags = [];
 			vm.tagapp.tagIds = [];
+			//清空文件控件
+			debugger
+			vm.destroyUploader();
+			vm.initUploader();
 		},
 		update: function () {
 			var id = getSelectedRow();

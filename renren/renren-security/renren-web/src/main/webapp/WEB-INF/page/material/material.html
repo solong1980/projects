@@ -109,8 +109,17 @@ button.close{
 			<div class="form-group">
 			   	<div class="col-sm-2 control-label">文件:</div>
 			   	<div class="wraper col-sm-10">
+				<!-- <ul id="file-list">
+				   		<p id="file-area">现有文件</p>
+			   			<li v-for="attachment in material.attachments"  style="width: 135%;" >
+							<span class="file-name">{{attachment.name}}</span>
+							<span style="display: inline-block;float: right;">
+								<span class="progress-text">100%</span><button style="padding:4px" :value=attachment.id @click="removeRemoteFile(attachment.id)" type="button" class="close">×</button>
+							</span>
+						</li>
+			   		</ul> -->
 					<p id="drag-area">把要上传的文件拖放到这里(请使用支持html5的浏览器)</p>
-					<ul id="file-list">
+					<ul id="file-list" >
 					</ul>
 					<div id="attachment_list" class="btn-wraper">
 					<input type="button" value="选择文件..." id="browse" />

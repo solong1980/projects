@@ -45,8 +45,9 @@
 		});
 		
 		this.uploader.bind('FileUploaded',function(uploader,file,result){
-			var fileDbIds = $.parseJSON(result.response);
-			vm.appendAttachmentIds(file.id,fileDbIds);
+			debugger
+			var attachments = $.parseJSON(result.response);
+			vm.appendAttachmentIds(file.id,attachments);
 		});
 		
 		/* uploader.on( 'uploadSuccess', function( file,response ) {
@@ -66,6 +67,7 @@
 		
 		//绑定文件添加进队列事件
 		uploader.bind('FilesAdded',function(uploader, files) {
+			debugger
 			for (var i = 0, len = files.length; i < len; i++) {
 				var file_name = files[i].name; //文件名
 				//构造html来更新UI
@@ -80,9 +82,9 @@
 							   uploader.removeFile(fileId);
 							   var $fileItem = $('#file-'+fileId);
 							   $fileItem.remove();
-							   var fileDbId = vm.fileItems[fileId];
-							   if(fileDbId){
-								   vm.material.attachments.splice($.inArray({id:fileDbId},vm.attachments),1);
+							   var attachment = vm.fileItems[fileId];
+							   if(attachment){
+								   vm.material.attachments.splice($.inArray(attachment,vm.attachments),1);
 								   vm.material.fileCount = vm.material.attachments.length;
 							   }
 						   }

@@ -60,8 +60,8 @@ public class AttachmentServiceImpl implements AttachmentService {
 	}
 
 	@Override
-	public List<Long> uploadFile(String saveDir, MultipartFile[] files) throws Exception {
-		List<Long> fIds = new ArrayList<Long>(files.length * 2);
+	public List<AttachmentEntity> uploadFile(String saveDir, MultipartFile[] files) throws Exception {
+		List<AttachmentEntity> uploadedFiles = new ArrayList<AttachmentEntity>(files.length * 2);
 		for (MultipartFile file : files) {
 			try {
 				if (file.isEmpty())
@@ -95,13 +95,23 @@ public class AttachmentServiceImpl implements AttachmentService {
 				attachment.setUploadTime(new Date());
 
 				save(attachment);
-				fIds.add(attachment.getId());
+				uploadedFiles.add(attachment);
 			} catch (Exception e) {
 				logger.error("upload file error," + file.getOriginalFilename(), e);
 				throw e;
 			}
 		}
-		return fIds;
+		return uploadedFiles;
+	}
+
+	@Override
+	public List<AttachmentEntity> getAttachmentsByMaterialId(Long materialId) {
+		return attachmentDao.getAttachmentsByMaterialId(materialId);
+	}
+
+	@Override
+	public void delFromMaterial(Long attachmentId) {
+		attachmentDao.updateMaterialIdNull(attachmentId);
 	}
 
 }

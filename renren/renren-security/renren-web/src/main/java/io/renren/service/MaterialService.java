@@ -29,4 +29,6 @@ public interface MaterialService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+	void updateAndWriteBackFileId(MaterialEntity material);
 }

@@ -39,12 +39,20 @@ public class AttachmentController {
 	@Autowired
 	private AttachmentService attachmentService;
 
+	@RequestMapping("file/delFromMaterial/{attachmentId}")
+	//@RequiresPermissions("attachment:delFromMaterial")
+	public R delFromMaterial(@PathVariable("attachmentId")Long attachmentId){
+		attachmentService.delFromMaterial(attachmentId);
+		return R.ok();
+	}
+	
+	
 	/**
 	 * 上传
 	 */
 	@RequestMapping("/file/upload")
 	// @RequiresPermissions("attachment:upload")
-	public List<Long> uploadFileHandler(@RequestParam("file") MultipartFile[] files, HttpSession session) {
+	public List<AttachmentEntity> uploadFileHandler(@RequestParam("file") MultipartFile[] files, HttpSession session) {
 		if (files != null && files.length > 0) {
 			String saveDir = session.getServletContext().getRealPath("/Images");
 			try {

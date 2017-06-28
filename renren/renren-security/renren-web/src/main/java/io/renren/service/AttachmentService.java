@@ -10,8 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 素材文件表
  * 
- * @author chenshun
- * @email sunlightcs@gmail.com
+ * @author longlianghua
+ * @email solong1980@163.com
  * @date 2017-06-23 19:10:33
  */
 public interface AttachmentService {
@@ -29,6 +29,14 @@ public interface AttachmentService {
 	void delete(Long id);
 
 	void deleteBatch(Long[] ids);
+
+	List<AttachmentEntity> uploadFile(String saveDir, MultipartFile[] files) throws Exception;
+
+	List<AttachmentEntity> getAttachmentsByMaterialId(Long materialId);
 	
-	List<Long> uploadFile(String saveDir,MultipartFile[] files) throws Exception;
+	/**
+	 * 删除附件同素材关系,即设置附件material_id为空即可
+	 * @param attachmentId
+	 */
+	void delFromMaterial(Long attachmentId);
 }

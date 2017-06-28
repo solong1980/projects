@@ -22,7 +22,11 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public MaterialEntity queryObject(Long id) {
-		return materialDao.queryObject(id);
+		MaterialEntity materialEntity = materialDao.queryObject(id);
+		List<AttachmentEntity> attachments = attachmentService.getAttachmentsByMaterialId(id);
+		if (attachments != null && attachments.size() > 0)
+			materialEntity.setAttachments(attachments.toArray(new AttachmentEntity[attachments.size()]));
+		return materialEntity;
 	}
 
 	@Override
@@ -76,4 +80,24 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 	}
 
+	@Override
+	@Transactional
+	public void updateAndWriteBackFileId(MaterialEntity material) {
+		AttachmentEntity[] attachments = material.getAttachments();
+		if (attachments == null) {
+			material.setFileCount(0);
+		} else {
+			material.setFileCount(attachments.length);
+		}
+
+		update(material);
+		Long id = material.getId();
+		if (attachments != null) {
+			// 回写素材id
+			for (AttachmentEntity attachmentsEntity : attachments) {
+				attachmentsEntity.setMaterialId(id);
+				attachmentService.update(attachmentsEntity);
+			}
+		}
+	}
 }

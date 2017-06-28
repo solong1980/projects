@@ -79,12 +79,10 @@ public class MaterialController extends AbstractController {
 	@RequiresPermissions("material:update")
 	public R update(@RequestBody MaterialEntity material) {
 		Long userId = ShiroUtils.getUserId();
-
 		material.setUpdateTime(MaterialEntity.getFastDate());
 		material.setUpdaterId(userId);
-
 		ValidatorUtils.validateEntity(material);
-		materialService.update(material);
+		materialService.updateAndWriteBackFileId(material);
 		return R.ok();
 	}
 

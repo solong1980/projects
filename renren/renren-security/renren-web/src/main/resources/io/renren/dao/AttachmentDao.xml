@@ -36,6 +36,15 @@
  	<select id="queryTotal" resultType="int">
 		select count(*) from t_attachment 
 	</select>
+
+	<select id="getAttachmentsByMaterialId" resultType="io.renren.entity.AttachmentEntity">
+		select * from t_attachment where material_id = #{materialId}
+	</select>
+
+	<update id="updateMaterialIdNull" parameterType="long">
+		update t_attachment set material_id = null where id = #{id}
+	</update>
+	 
 	 
 	<insert id="save" parameterType="io.renren.entity.AttachmentEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into t_attachment

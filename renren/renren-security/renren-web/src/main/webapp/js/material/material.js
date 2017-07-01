@@ -289,23 +289,32 @@ var vm = new Vue({
 			});
 		},
 		saveOrUpdate: function (event) {
-			debugger
 			var url = vm.material.id == null ? "../material/save" : "../material/update";
 			vm.material.tagIds = vm.tagapp.tagIds.join(",");
-			$.ajax({
-				type: "POST",
-			    url: url,
-                contentType: "application/json",
-			    data: JSON.stringify(vm.material),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
+			confirm('确定提交？',function(){
+				//disable提交按钮,防止重复提交
+				var $btn = $(event.currentTarget);
+				$btn.attr("disabled",true);
+				
+				$.ajax({
+					type: "POST",
+				    url: url,
+	                contentType: "application/json",
+				    data: JSON.stringify(vm.material),
+				    success: function(r){
+				    	if(r.code === 0){
+							alert('操作成功', function(index){
+								vm.reload();
+							});
+						}else{
+							alert(r.msg);
+						}
+					},
+					complete:function(){
+						//恢复按钮
+						$btn.attr("disabled",""); 
 					}
-				}
+				});
 			});
 		},
 		reload: function (event) {

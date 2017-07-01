@@ -1,7 +1,7 @@
 $(function () {
 	function statusFormat( cellvalue, options, rowObject ){
 		if(cellvalue==0)return '未发布';
-		if(cellvalue==1)return '已发布';
+		if(cellvalue==50)return '已发布';
 		return '未知';
 	}
 	function typeFormat( cellvalue, options, rowObject ){
@@ -18,19 +18,19 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'ID', name: 'id', width: 30, key: true },
-			{ label: '状态', name: 'status', formatter:statusFormat, width: 60 },
+			{ label: '状态', name: 'status',index: "m.status", formatter:statusFormat, width: 60 },
 			{ label: '素材名称', name: 'name', width: 100 },
-			{ label: '标签ID', name: 'tagIds', width: 80 },
-			{ label: '关键词ID', name: 'keywordIds', width: 60 },
+			{ label: '标签ID', name: 'tagIds',index: "tag_ids", width: 100 },
+			{ label: '关键词ID', name: 'keywordIds',index: "keyword_ids", width: 60 },
 			{ label: '类型', name: 'type', formatter:typeFormat, width: 100 },
 			{ label: '编者ID', name: 'makerid', width: 80 },
-			{ label: '编者', name: 'maker', width: 60 },
-			{ label: '上传文件数', name: 'fileCount', width: 100 },
+			{ label: '编者', name: 'maker', width: 100 },
+			{ label: '上传文件数', name: 'fileCount',index: "file_count", width: 100 },
 			{ label: '描述', name: 'description', width: 80 },
-			{ label: '创建人id', name: 'createrId', width: 60 },
-			{ label: '创建时间', name: 'createTime', width: 100 },
-			{ label: '更新人id', name: 'updaterId', width: 80 },
-			{ label: '更新时间', name: 'updateTime', width: 80 }
+			{ label: '创建人', name: 'createrName',index: "s1.username", width: 100 },
+			{ label: '创建时间', name: 'createTime',index: "m.create_time", width: 100 },
+			{ label: '更新人', name: 'updaterName',index: "s2.username", width: 100 },
+			{ label: '更新时间', name: 'updateTime',index: "m.update_time",sortable:false, width: 100 }
         ],
 		viewrecords: true,
 		height:'auto',
@@ -113,6 +113,7 @@ var vm = new Vue({
 		showList: true,
 		title: null,
 		fileItems:{},
+		materialPriceEmptySettings:[],
 		material: {
 		},
 		tagapp:{
@@ -126,6 +127,15 @@ var vm = new Vue({
 	    this.tagapp.tags = this.tagapp.tagIds.map(function(item,index) {
 	        return { value: index, label: item };
 	    });
+	    
+	    //于mounted时调用后台,避免每次新增后台调用,获取一个等级相关价格空的配置
+	    $.get("../materialprice/materialpricesettings/0",function(r){
+			if(r.code == 0){
+				vm.materialPriceEmptySettings = r.materialPriceSettings;
+			}else{
+				alert(r.msg);
+			}
+		});
 	},
 	methods: {
 		query: function () {
@@ -134,16 +144,31 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.material = {};
+			
 			//消除类型radio已有的选择,共用一个form表单导致
 			var typeCheckedRadioEls = $("div .btn-group > div[class='radio'] > ins[class='checked']");
-			typeCheckedRadioEls.trigger("click");
+			//如果存在typeCheckedRadioEls,则触发一个点击事件
+			if(typeCheckedRadioEls)typeCheckedRadioEls.trigger("click");
+			
 			//新增置空tag控件数据
 			vm.tagapp.tags = [];
 			vm.tagapp.tagIds = [];
-			//清空文件控件
+			
+			//清空并重置文件控件
 			vm.destroyUploader();
 			vm.initUploader();
+			
+			vm.material = {};
+			//查询等级列表,关联出需要配置的价格条目,设置到vm.material中,有vuejs渲染价格配置输入界面
+			vm.material.materialPrices = vm.materialPriceEmptySettings;
+			//于mounted时调用后台,避免每次新增后台调用,获取一个等级相关价格空的配置
+		    $.get("../materialprice/materialpricesettings/0",function(r){
+				if(r.code == 0){
+					vm.materialPriceEmptySettings = r.materialPriceSettings;
+				}else{
+					alert(r.msg);
+				}
+			});
 		},
 		update: function () {
 			var id = getSelectedRow();
@@ -237,6 +262,57 @@ var vm = new Vue({
                 typeRadioEl.trigger("click");
             });
 		},
+		del: function (event) {
+			var ids = getSelectedRows();
+			if(ids == null){
+				return ;
+			}
+			confirm('确定要删除选中的记录？', function(){
+				$.ajax({
+					type: "POST",
+				    url: "../material/delete",
+                    contentType: "application/json",
+				    data: JSON.stringify(ids),
+				    success: function(r){
+						if(r.code == 0){
+							alert('操作成功', function(index){
+								vm.reload();
+							});
+						}else{
+							alert(r.msg);
+						}
+					}
+				});
+			});
+		},
+		saveOrUpdate: function (event) {
+			debugger
+			var url = vm.material.id == null ? "../material/save" : "../material/update";
+			vm.material.tagIds = vm.tagapp.tagIds.join(",");
+			$.ajax({
+				type: "POST",
+			    url: url,
+                contentType: "application/json",
+			    data: JSON.stringify(vm.material),
+			    success: function(r){
+			    	if(r.code === 0){
+						alert('操作成功', function(index){
+							vm.reload();
+						});
+					}else{
+						alert(r.msg);
+					}
+				}
+			});
+		},
+		reload: function (event) {
+			vm.showList = true;
+			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			$("#jqGrid").jqGrid('setGridParam',{ 
+                postData:{'key': vm.q.key},
+                page:page
+            }).trigger("reloadGrid");
+		},
 		updateMaterialType:function(type){
 			vm.material.type = type;
 		},
@@ -282,56 +358,6 @@ var vm = new Vue({
 					}
 				}
 			});
-	    },
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
-				return ;
-			}
-			confirm('确定要删除选中的记录？', function(){
-				$.ajax({
-					type: "POST",
-				    url: "../material/delete",
-                    contentType: "application/json",
-				    data: JSON.stringify(ids),
-				    success: function(r){
-						if(r.code == 0){
-							alert('操作成功', function(index){
-								vm.reload();
-							});
-						}else{
-							alert(r.msg);
-						}
-					}
-				});
-			});
-		},
-		saveOrUpdate: function (event) {
-			var url = vm.material.id == null ? "../material/save" : "../material/update";
-			vm.material.tagIds = vm.tagapp.tagIds.join(",");
-			$.ajax({
-				type: "POST",
-			    url: url,
-                contentType: "application/json",
-			    data: JSON.stringify(vm.material),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
-				}
-			});
-		},
-		reload: function (event) {
-			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
-                postData:{'key': vm.q.key},
-                page:page
-            }).trigger("reloadGrid");
-		}
+	    }
 	}
 });

@@ -1,5 +1,7 @@
 package io.renren.entity;
 
+import java.util.List;
+
 /**
  * 素材表
  * 
@@ -20,8 +22,10 @@ public class MaterialEntity extends BaseEntity {
 	private Integer fileCount;
 	private String description;
 
-	// 文件实体
+	// 素材文件实体
 	private AttachmentEntity[] attachments;
+	// 素材定价
+	private List<MaterialPriceEntity> materialPrices;
 
 	public void setStatus(Integer status) {
 		this.status = status;
@@ -101,6 +105,14 @@ public class MaterialEntity extends BaseEntity {
 
 	public void setAttachments(AttachmentEntity[] attachments) {
 		this.attachments = attachments;
+	}
+
+	public List<MaterialPriceEntity> getMaterialPrices() {
+		return materialPrices;
+	}
+
+	public void setMaterialPrices(List<MaterialPriceEntity> materialPrices) {
+		this.materialPrices = materialPrices;
 	}
 
 }

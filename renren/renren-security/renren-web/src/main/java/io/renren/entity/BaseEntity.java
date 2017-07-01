@@ -27,14 +27,16 @@ public class BaseEntity implements Serializable {
 	// key
 	private Long id;
 	private Long createrId;
+	private String createrName;
 	private Date createTime;
 	private Long updaterId;
+	private String updaterName;
 	private Date updateTime;
-	
-	public static Date getFastDate(){
+
+	public static Date getFastDate() {
 		return fastAquiredDate;
 	}
-	
+
 	/**
 	 * 设置：key
 	 */
@@ -49,37 +51,52 @@ public class BaseEntity implements Serializable {
 		return id;
 	}
 
+	public Long getCreaterId() {
+		return createrId;
+	}
 
 	public void setCreaterId(Long createrId) {
 		this.createrId = createrId;
 	}
 
-	public Long getCreaterId() {
-		return createrId;
+	public String getCreaterName() {
+		return createrName;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setCreaterName(String createrName) {
+		this.createrName = createrName;
 	}
 
 	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setUpdaterId(Long updaterId) {
-		this.updaterId = updaterId;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public Long getUpdaterId() {
 		return updaterId;
 	}
 
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
+	public void setUpdaterId(Long updaterId) {
+		this.updaterId = updaterId;
+	}
+
+	public String getUpdaterName() {
+		return updaterName;
+	}
+
+	public void setUpdaterName(String updaterName) {
+		this.updaterName = updaterName;
 	}
 
 	public Date getUpdateTime() {
 		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 }

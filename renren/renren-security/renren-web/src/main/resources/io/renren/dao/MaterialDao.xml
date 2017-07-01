@@ -27,13 +27,30 @@
 	</select>
 
 	<select id="queryList" resultType="io.renren.entity.MaterialEntity">
-		select * from t_material
+		select 
+		m.id,
+		m.status,
+		m.name,
+		m.tag_ids		as tagIds,
+		m.keyword_ids as keywordIds,
+		m.type,
+		m.makerid,
+		m.maker,
+		m.file_count	as fileCount,
+		m.description,
+		m.creater_id	as createrId,
+		s1.username as createrName,
+		m.create_time as createTime,
+		m.updater_id  as updaterId,
+		s2.username as updaterName,
+		m.update_time as updateTime
+		 from t_material m left join sys_user s1 on creater_id = s1.user_id left join sys_user s2 on updater_id = s2.user_id
 		<choose>
 			<when test="sidx != null and sidx.trim() != ''">
 				order by ${sidx} ${order}
 			</when>
 			<otherwise>
-				order by id desc
+				order by m.id desc
 			</otherwise>
 		</choose>
 		<if test="offset != null and limit != null">

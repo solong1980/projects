@@ -3,7 +3,9 @@ package io.renren.service.impl;
 import io.renren.dao.MaterialDao;
 import io.renren.entity.AttachmentEntity;
 import io.renren.entity.MaterialEntity;
+import io.renren.entity.MaterialPriceEntity;
 import io.renren.service.AttachmentService;
+import io.renren.service.MaterialPriceService;
 import io.renren.service.MaterialService;
 
 import java.util.List;
@@ -20,12 +22,24 @@ public class MaterialServiceImpl implements MaterialService {
 	@Autowired
 	private AttachmentService attachmentService;
 
+	@Autowired
+	private MaterialPriceService materialPriceService;
+
 	@Override
 	public MaterialEntity queryObject(Long id) {
 		MaterialEntity materialEntity = materialDao.queryObject(id);
-		List<AttachmentEntity> attachments = attachmentService.getAttachmentsByMaterialId(id);
-		if (attachments != null && attachments.size() > 0)
-			materialEntity.setAttachments(attachments.toArray(new AttachmentEntity[attachments.size()]));
+		if (materialEntity != null) {
+			List<AttachmentEntity> attachments = attachmentService.getAttachmentsByMaterialId(id);
+			if (attachments != null && attachments.size() > 0)
+				materialEntity.setAttachments(attachments.toArray(new AttachmentEntity[attachments.size()]));
+
+			// 查询标签
+
+			// 查询定价
+			List<MaterialPriceEntity> materialPrices = materialPriceService.getMaterialPriceSettings(id);
+			materialEntity.setMaterialPrices(materialPrices);
+
+		}
 		return materialEntity;
 	}
 
@@ -40,8 +54,17 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
+	@Transactional
 	public void save(MaterialEntity material) {
 		materialDao.save(material);
+		Long materialId = material.getId();
+		List<MaterialPriceEntity> materialPrices = material.getMaterialPrices();
+		if (materialPrices != null && materialPrices.isEmpty()) {
+			for (MaterialPriceEntity materialPrice : materialPrices) {
+				materialPrice.setMaterialId(materialId);
+				materialPriceService.save(materialPrice);
+			}
+		}
 	}
 
 	@Override
@@ -70,12 +93,20 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 
 		save(material);
-		Long id = material.getId();
+		Long materialId = material.getId();
 		if (attachments != null) {
 			// 回写素材id
 			for (AttachmentEntity attachmentsEntity : attachments) {
-				attachmentsEntity.setMaterialId(id);
-				attachmentService.update(attachmentsEntity);
+				attachmentsEntity.setMaterialId(materialId);
+				attachmentService.update(attachmentsEntity);//待修改
+			}
+		}
+		// 新增素材价格设置
+		List<MaterialPriceEntity> materialPrices = material.getMaterialPrices();
+		if (materialPrices != null && !materialPrices.isEmpty()) {
+			for (MaterialPriceEntity materialPrice : materialPrices) {
+				materialPrice.setMaterialId(materialId);
+				materialPriceService.save(materialPrice);
 			}
 		}
 	}
@@ -91,13 +122,15 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 
 		update(material);
-		Long id = material.getId();
+		Long materialId = material.getId();
 		if (attachments != null) {
 			// 回写素材id
 			for (AttachmentEntity attachmentsEntity : attachments) {
-				attachmentsEntity.setMaterialId(id);
+				attachmentsEntity.setMaterialId(materialId);
 				attachmentService.update(attachmentsEntity);
 			}
 		}
+		materialPriceService
+				.updateMaterialPriceSettings(materialId, material.getStatus(), material.getMaterialPrices());
 	}
 }

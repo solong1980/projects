@@ -14,13 +14,22 @@ import io.renren.entity.AttachmentEntity;
 public interface AttachmentDao extends BaseDao<AttachmentEntity> {
 	/**
 	 * 根据素材id查询素材文件
+	 * 
 	 * @param materialId
 	 * @return
 	 */
 	List<AttachmentEntity> getAttachmentsByMaterialId(Long materialId);
+
 	/**
 	 * 更新附件素材id为空,脱离附件同素材关系
+	 * 
 	 * @param attachmentId
 	 */
-	void updateMaterialIdNull(Long attachmentId);	
+	void updateMaterialIdNull(Long attachmentId);
+	
+	/**
+	 * 回写素材id
+	 * @param attachment
+	 */
+	void updateMaterialId(AttachmentEntity attachment);
 }

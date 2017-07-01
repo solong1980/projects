@@ -98,7 +98,7 @@ public class MaterialServiceImpl implements MaterialService {
 			// 回写素材id
 			for (AttachmentEntity attachmentsEntity : attachments) {
 				attachmentsEntity.setMaterialId(materialId);
-				attachmentService.update(attachmentsEntity);//待修改
+				attachmentService.updateMaterialId(attachmentsEntity);
 			}
 		}
 		// 新增素材价格设置
@@ -127,7 +127,7 @@ public class MaterialServiceImpl implements MaterialService {
 			// 回写素材id
 			for (AttachmentEntity attachmentsEntity : attachments) {
 				attachmentsEntity.setMaterialId(materialId);
-				attachmentService.update(attachmentsEntity);
+				attachmentService.updateMaterialId(attachmentsEntity);
 			}
 		}
 		materialPriceService

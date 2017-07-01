@@ -39,4 +39,6 @@ public interface AttachmentService {
 	 * @param attachmentId
 	 */
 	void delFromMaterial(Long attachmentId);
+
+	void updateMaterialId(AttachmentEntity attachment);
 }

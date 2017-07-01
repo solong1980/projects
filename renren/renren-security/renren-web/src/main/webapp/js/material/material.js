@@ -148,7 +148,7 @@ var vm = new Vue({
 			//消除类型radio已有的选择,共用一个form表单导致
 			var typeCheckedRadioEls = $("div .btn-group > div[class='radio'] > ins[class='checked']");
 			//如果存在typeCheckedRadioEls,则触发一个点击事件
-			if(typeCheckedRadioEls)typeCheckedRadioEls.trigger("click");
+			typeCheckedRadioEls.trigger("click");
 			
 			//新增置空tag控件数据
 			vm.tagapp.tags = [];
@@ -185,8 +185,15 @@ var vm = new Vue({
                 //清空文件控件
     			vm.destroyUploader();
     			vm.initUploader();
+    			
+    		     //设置类型icheck控件
+                //$("div .btn-group > div[class='radio'][value=60]")
+                var typeRadioEl = $("div .btn-group > div[class='radio'][value="+type+"] > ins[class='checked']");
+                if(typeRadioEl.length == 0){
+                	$("div .btn-group > div[class='radio'][value="+type+"]").trigger("click");
+                }
+    			
                 //初始现有文件
-    			debugger
     			if(vm.material&&vm.material.attachments){
     				$.each(vm.material.attachments,function(index,item){
 	    				//构造html来更新UI
@@ -255,11 +262,7 @@ var vm = new Vue({
     					}
     				}
     			});
-                
-                //设置类型icheck控件
-                //$("div .btn-group > div[class='radio'][value=60]")
-                var typeRadioEl = $("div .btn-group > div[class='radio'][value="+type+"]");
-                typeRadioEl.trigger("click");
+           
             });
 		},
 		del: function (event) {

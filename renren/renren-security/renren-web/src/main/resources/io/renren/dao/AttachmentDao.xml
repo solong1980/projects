@@ -44,7 +44,9 @@
 	<update id="updateMaterialIdNull" parameterType="long">
 		update t_attachment set material_id = null where id = #{id}
 	</update>
-	 
+	<update id="updateMaterialId" parameterType="io.renren.entity.AttachmentEntity">
+		update t_attachment set material_id = #{materialId} where id = #{id}
+	</update>
 	 
 	<insert id="save" parameterType="io.renren.entity.AttachmentEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into t_attachment

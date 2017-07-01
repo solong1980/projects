@@ -114,4 +114,8 @@ public class AttachmentServiceImpl implements AttachmentService {
 		attachmentDao.updateMaterialIdNull(attachmentId);
 	}
 
+	@Override
+	public void updateMaterialId(AttachmentEntity attachment) {
+		attachmentDao.updateMaterialId(attachment);
+	}
 }

@@ -49,7 +49,9 @@ var vm = new Vue({
 		},
 		showList: true,
 		title: null,
-		materialTag: {}
+		materialTag: {
+			status: 0
+		}
 	},
 	methods: {
 		query: function () {
@@ -58,7 +60,7 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.materialTag = {};
+			vm.materialTag = {status: 0};
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -122,6 +124,7 @@ var vm = new Vue({
             });
 		},
 		reload: function (event) {
+			this.$validator.errorBag.clear();
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 

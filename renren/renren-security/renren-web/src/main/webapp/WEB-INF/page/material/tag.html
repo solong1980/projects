@@ -31,7 +31,7 @@
 							   class="form-control"
 							   name="标签名称"
 							   placeholder="标签名称"
-							   v-validate="'required'"
+							   v-validate="'required|max:100'"
 							   :class="{'control-group': true, 'warning': errors.has('标签名称') }" />
 						<span v-show="errors.has('标签名称')" class="label label-warning">{{errors.first('标签名称')}}</span>
 					</div>
@@ -41,14 +41,20 @@
 					<div class="col-sm-10">
 						<textarea class="form-control"
 							v-model="materialTag.tagDescription" placeholder="标签定义" rows="5"
-							cols="3"></textarea>
+							cols="3"
+							name="标签定义"
+							v-validate="'required|max:200'"
+							:class="{'control-group': true, 'warning': errors.has('标签定义') }"  ></textarea>
+						<span v-show="errors.has('标签定义')" class="label label-warning">{{errors.first('标签定义')}}</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-2 control-label">状态</div>
 					<div class="col-sm-10">
-						<input type="text" class="form-control"
-							v-model="materialTag.status" placeholder="状态" />
+						<select class="form-control" v-model="materialTag.status" placeholder="状态">
+							<option value="0" selected="selected">生效</option>
+							<option value="1">失效</option>
+						</select>
 					</div>
 				</div>
 				<div class="form-group">

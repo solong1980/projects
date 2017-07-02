@@ -137,27 +137,27 @@ button.close {
 			   				<tr><td><span class="fa fa-level-down"></span>&nbsp;<strong>等级</strong></td><td><span class="fa fa-flag"></span><strong>&nbsp;名称</strong></td>
 			   				<td><strong><span class="fa fa-star-o"></span>&nbsp;积分</strong></td><td><strong><span class="fa fa-rmb"></span>&nbsp;价格</strong></td><td><span class="fa fa-underline"></span><strong>&nbsp;单位</strong></td></tr>
 			   			</thead>
-			   			<tbody>
-			   			<tr v-for="(price,index) in material.materialPrices" >	
-			   				<input type="hidden" v-model="price.gradeId" />
-			   				<td>{{price.gradeDefinition.level}}</td>
-			   				<td>{{price.gradeDefinition.name}}</td>
-			   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'积分')}"><input type="text" v-model="price.integral" v-bind:name="price.gradeDefinition.name+'积分'" v-validate="'required|between:0,20000'" :class="{'form-control control-group': true, 'warning': errors.has(price.gradeDefinition.name+'积分') }"/></td>
-			   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'价格')}"><input type="text" v-model="price.price" v-bind:name="price.gradeDefinition.name+'价格'" v-validate="'required|between:0,20000'" :class="{'form-control control-group': true, 'warning': errors.has(price.gradeDefinition.name+'价格') }"/></td>
-			   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'单位')}">
-			   					<select v-model="price.unit" v-bind:name="price.gradeDefinition.name+'单位'" v-validate="'required|in:10,20'" :class="{'form-control control-group': true, 'warning': errors.has(price.gradeDefinition.name+'单位') }" >
-			   						<option value="10">元</option>
-			   						<option value="20">金币</option>
-			   					</select>
-							</td>
-			   			</tr>
-			   			<tr v-for="(price,index) in material.materialPrices" >
-			   				<td colspan="5">
-			   				<span v-show="errors.has(price.gradeDefinition.name+'积分')" class="label label-danger">{{errors.first(price.gradeDefinition.name+'积分')}}</span>
-			   				<span v-show="errors.has(price.gradeDefinition.name+'价格')" class="label label-danger">{{errors.first(price.gradeDefinition.name+'价格')}}</span>
-			   				<span v-show="errors.has(price.gradeDefinition.name+'单位')" class="label label-danger">{{errors.first(price.gradeDefinition.name+'单位')}}</span>
-			   				</td>
-			   			</tr>
+			   			<tbody v-for="(price,index) in material.materialPrices">
+				   			<tr>	
+				   				<input type="hidden" v-model="price.gradeId" />
+				   				<td>{{price.gradeDefinition.level}}</td>
+				   				<td>{{price.gradeDefinition.name}}</td>
+				   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'积分')}"><input type="text" v-model="price.integral" v-bind:name="price.gradeDefinition.name+'积分'" v-validate="'required|between:0,20000'" :class="{'form-control control-group': true, 'warning': errors.has(price.gradeDefinition.name+'积分') }"/></td>
+				   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'价格')}"><input type="text" v-model="price.price" v-bind:name="price.gradeDefinition.name+'价格'" v-validate="'required|between:0,20000'" :class="{'form-control control-group': true, 'warning': errors.has(price.gradeDefinition.name+'价格') }"/></td>
+				   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'单位')}">
+				   					<select v-model="price.unit" v-bind:name="price.gradeDefinition.name+'单位'" v-validate="'required|in:10,20'" :class="{'form-control control-group': true, 'warning': errors.has(price.gradeDefinition.name+'单位') }" >
+				   						<option value="10">元</option>
+				   						<option value="20">金币</option>
+				   					</select>
+								</td>
+				   			</tr>
+				   			<tr>
+				   				<td colspan="5" style="padding: 0px;border: 0px">
+				   				<span v-show="errors.has(price.gradeDefinition.name+'积分')" class="label label-danger" style="margin: 2px">{{errors.first(price.gradeDefinition.name+'积分')}}</span>
+				   				<span v-show="errors.has(price.gradeDefinition.name+'价格')" class="label label-danger" style="margin: 2px">{{errors.first(price.gradeDefinition.name+'价格')}}</span>
+				   				<span v-show="errors.has(price.gradeDefinition.name+'单位')" class="label label-danger" style="margin: 2px">{{errors.first(price.gradeDefinition.name+'单位')}}</span>
+				   				</td>
+				   			</tr>
 			   			</tbody>
 			   		</table>
 			    </div>

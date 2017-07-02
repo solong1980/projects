@@ -20,7 +20,6 @@
 button.close {
 	padding: 10px;
 }
-
 </style>
 </head>
 <body>
@@ -44,12 +43,23 @@ button.close {
 		<form class="form-horizontal">
 			<div class="form-group">
 			   	<div class="col-sm-2 control-label">素材名称:</div>
-			   	<div class="col-sm-10">
-			      <input type="text" required class="form-control" v-model="material.name" placeholder="素材名称"/>
+			   	<div :class="{'col-sm-10': true, 'has-warning': errors.has('素材名称') }">
+			      <input type="text" class="form-control" v-model="material.name" placeholder="素材名称"
+			      	name="素材名称"  v-validate="'required'" :class="{'control-group': true, 'warning': errors.has('素材名称') }"/>
+					<span v-show="errors.has('素材名称')" class="label label-warning">{{errors.first('素材名称')}}</span>
 			    </div>
 			</div>
 			<div class="form-group">
 			   	<div class="col-sm-2 control-label">素材类型:</div>
+			   	<div @click="updateMaterialType(30)" class="col-sm-10 btn-group typearea" data-toggle="buttons">
+					<!-- 类型 10:图片，20:视频，30:音频，40:字体，50:挂件，60:滤镜 -->
+			        <div class="radio" @click="updateMaterialType(10)" name="type" value="10" style="cursor: default;"><ins class=""></ins><span>图片 </span></div>
+			        <div class="radio" @click="updateMaterialType(20)" name="type" value="20" style="cursor: default;"><ins class=""></ins><span>视频</span></div>
+			        <div class="radio" @click="updateMaterialType(30)" name="type" value="30" style="cursor: default;"><ins class=""></ins><span>音频</span></div>
+			        <div class="radio" @click="updateMaterialType(40)" name="type" value="40" style="cursor: default;"><ins class=""></ins><span>字体</span></div>
+			        <div class="radio" @click="updateMaterialType(50)" name="type" value="50" style="cursor: default;"><ins class=""></ins><span>挂件</span></div>
+			        <div class="radio" @click="updateMaterialType(60)" name="type" value="60" style="cursor: default;"><ins class=""></ins><span>滤镜</span></div>
+			    </div>
 			   	<!-- <div class="btn-group" data-toggle="buttons">  
 					<label class="btn btn-primary active" >  
 						<input type="radio" name="options" id="option1" autocomplete="off" checked>实时  
@@ -79,15 +89,6 @@ button.close {
 						<input type="radio" v-model="material.type" name="type" value="60" /> 滤镜
 					</label>
 				</div> -->
-				<div class="col-sm-10 btn-group typearea" data-toggle="buttons">
-					<!-- 类型 10:图片，20:视频，30:音频，40:字体，50:挂件，60:滤镜 -->
-			        <div class="radio" @click="updateMaterialType(10)" name="type" value="10" style="cursor: default;"><ins class=""></ins><span>图片 </span></div>
-			        <div class="radio" @click="updateMaterialType(20)" name="type" value="20" style="cursor: default;"><ins class=""></ins><span>视频</span></div>
-			        <div class="radio" @click="updateMaterialType(30)" name="type" value="30" style="cursor: default;"><ins class=""></ins><span>音频</span></div>
-			        <div class="radio" @click="updateMaterialType(40)" name="type" value="40" style="cursor: default;"><ins class=""></ins><span>字体</span></div>
-			        <div class="radio" @click="updateMaterialType(50)" name="type" value="50" style="cursor: default;"><ins class=""></ins><span>挂件</span></div>
-			        <div class="radio" @click="updateMaterialType(60)" name="type" value="60" style="cursor: default;"><ins class=""></ins><span>滤镜</span></div>
-			    </div>
 			</div>
 			<div class="form-group">
 			   	<div class="col-sm-2 control-label">作者:</div>
@@ -137,20 +138,27 @@ button.close {
 			   				<td><strong><span class="fa fa-star-o"></span>&nbsp;积分</strong></td><td><strong><span class="fa fa-rmb"></span>&nbsp;价格</strong></td><td><span class="fa fa-underline"></span><strong>&nbsp;单位</strong></td></tr>
 			   			</thead>
 			   			<tbody>
-			   			<tr v-for="price in material.materialPrices" >	
+			   			<tr v-for="(price,index) in material.materialPrices" >	
 			   				<input type="hidden" v-model="price.gradeId" />
 			   				<td>{{price.gradeDefinition.level}}</td>
 			   				<td>{{price.gradeDefinition.name}}</td>
-			   				<td><input type="text" v-model="price.integral"/></td>
-			   				<td><input type="text" v-model="price.price"/></td>
-			   				<td>
-			   					<select v-model="price.unit">
+			   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'积分')}"><input type="text" v-model="price.integral" v-bind:name="price.gradeDefinition.name+'积分'" v-validate="'required|between:0,20000'" :class="{'form-control control-group': true, 'warning': errors.has(price.gradeDefinition.name+'积分') }"/></td>
+			   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'价格')}"><input type="text" v-model="price.price" v-bind:name="price.gradeDefinition.name+'价格'" v-validate="'required|between:0,20000'" :class="{'form-control control-group': true, 'warning': errors.has(price.gradeDefinition.name+'价格') }"/></td>
+			   				<td :class="{'has-warning': errors.has(price.gradeDefinition.name+'单位')}">
+			   					<select v-model="price.unit" v-bind:name="price.gradeDefinition.name+'单位'" v-validate="'required|in:10,20'" >
 			   						<option value="10">元</option>
 			   						<option value="20">金币</option>
 			   					</select>
 							</td>
 			   			</tr>
-				   		 </tbody>
+			   			<tr v-for="(price,index) in material.materialPrices" >
+			   				<td colspan="5">
+			   				<span v-show="errors.has(price.gradeDefinition.name+'积分')" class="label label-danger">{{errors.first(price.gradeDefinition.name+'积分')}}</span>
+			   				<span v-show="errors.has(price.gradeDefinition.name+'价格')" class="label label-danger">{{errors.first(price.gradeDefinition.name+'价格')}}</span>
+			   				<span v-show="errors.has(price.gradeDefinition.name+'单位')" class="label label-danger">{{errors.first(price.gradeDefinition.name+'单位')}}</span>
+			   				</td>
+			   			</tr>
+			   			</tbody>
 			   		</table>
 			    </div>
 			</div>

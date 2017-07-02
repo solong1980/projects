@@ -71,22 +71,26 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.materialTag.id == null ? "../materialtag/save" : "../materialtag/update";
-			$.ajax({
-				type: "POST",
-			    url: url,
-			    contentType: "application/json",
-			    data: JSON.stringify(vm.materialTag),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
-				}
-			});
+			this.$validator.validateAll().then(function(result) {
+		        if (result) {
+		          var url = vm.materialTag.id == null ? "../materialtag/save" : "../materialtag/update";
+					$.ajax({
+						type: "POST",
+					    url: url,
+					    contentType: "application/json",
+					    data: JSON.stringify(vm.materialTag),
+					    success: function(r){
+					    	if(r.code === 0){
+								alert('操作成功', function(index){
+									vm.reload();
+								});
+							}else{
+								alert(r.msg);
+							}
+						}
+					});
+		        }
+		    });
 		},
 		del: function (event) {
 			var ids = getSelectedRows();

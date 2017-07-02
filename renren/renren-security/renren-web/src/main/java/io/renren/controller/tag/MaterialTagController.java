@@ -18,6 +18,7 @@ import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
 import io.renren.utils.R;
 import io.renren.utils.ShiroUtils;
+import io.renren.validator.ValidatorUtils;
 
 /**
  * 
@@ -89,12 +90,10 @@ public class MaterialTagController {
 	@RequiresPermissions("materialtag:save")
 	@SysLog("save material tag")
 	public R save(@RequestBody MaterialTagEntity materialTag) {
-
+		ValidatorUtils.validateEntity(materialTag);
 		materialTag.setCreaterId(ShiroUtils.getUserId());
 		materialTag.setCreateTime(MaterialTagEntity.getFastDate());
-
 		materialTagService.save(materialTag);
-
 		return R.ok();
 	}
 
@@ -104,8 +103,8 @@ public class MaterialTagController {
 	@RequestMapping("/update")
 	@RequiresPermissions("materialtag:update")
 	public R update(@RequestBody MaterialTagEntity materialTag) {
+		ValidatorUtils.validateEntity(materialTag);
 		materialTagService.update(materialTag);
-
 		return R.ok();
 	}
 

@@ -289,31 +289,45 @@ var vm = new Vue({
 			});
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.material.id == null ? "../material/save" : "../material/update";
-			vm.material.tagIds = vm.tagapp.tagIds.join(",");
-			confirm('确定提交？',function(){
-				//disable提交按钮,防止重复提交
-				var $btn = $(event.currentTarget);
-				$btn.attr("disabled",true);
+			this.$validator.validateAll().then(function(result) {
+				var typeRadioEl = $("div .btn-group > div[class='radio'] > ins[class='checked']");
+				//未选择素材类型
+                if(typeRadioEl.length == 0){
+                	alert("请选择素材类型");
+                	return;
+                }
+                //未上传文件
+                if(!vm.material.attachments||vm.material.attachments.length == 0){
+                	alert("请选择上传素材文件");
+                	return;
+                }
 				
-				$.ajax({
-					type: "POST",
-				    url: url,
-	                contentType: "application/json",
-				    data: JSON.stringify(vm.material),
-				    success: function(r){
-				    	if(r.code === 0){
-							alert('操作成功', function(index){
-								vm.reload();
-							});
-						}else{
-							alert(r.msg);
+				var url = vm.material.id == null ? "../material/save" : "../material/update";
+				vm.material.tagIds = vm.tagapp.tagIds.join(",");
+				confirm('确定提交？',function(){
+					//disable提交按钮,防止重复提交
+					var $btn = $(event.currentTarget);
+					$btn.attr("disabled",true);
+					
+					$.ajax({
+						type: "POST",
+					    url: url,
+		                contentType: "application/json",
+					    data: JSON.stringify(vm.material),
+					    success: function(r){
+					    	if(r.code === 0){
+								alert('操作成功', function(index){
+									vm.reload();
+								});
+							}else{
+								alert(r.msg);
+							}
+						},
+						complete:function(){
+							//恢复按钮
+							$btn.attr("disabled",""); 
 						}
-					},
-					complete:function(){
-						//恢复按钮
-						$btn.attr("disabled",""); 
-					}
+					});
 				});
 			});
 		},
@@ -329,7 +343,6 @@ var vm = new Vue({
 			vm.material.type = type;
 		},
 		appendAttachmentIds:function(fileId,attachments/**数组只有一个元素 */){
-			debugger
 			if(!vm.material.attachments){
 				vm.material.attachments = [];
 				vm.material.fileCount = 0;

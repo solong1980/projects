@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="${rc.contextPath}/statics/plugins/jqgrid/ui.jqgrid-bootstrap.css">
 <link rel="stylesheet" href="${rc.contextPath}/statics/plugins/ztree/css/metroStyle/metroStyle.css">
 <link rel="stylesheet" href="${rc.contextPath}/statics/css/main.css">
-<!-- 引入样式 -->
+<!-- 引入element-ui样式 -->
 <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
 
 <script src="${rc.contextPath}/statics/libs/jquery.min.js"></script>
@@ -17,5 +17,34 @@
 <script src="${rc.contextPath}/statics/plugins/jqgrid/jquery.jqGrid.min.js"></script>
 <script src="${rc.contextPath}/statics/plugins/ztree/jquery.ztree.all.min.js"></script>
 <script src="${rc.contextPath}/js/common.js"></script>
-<!-- 引入组件库 -->
+
+<!-- 引入element-ui组件库 -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<!-- 引入vee-validate组件 -->
+<script src="/statics/plugins/veevalidate/vee-validate.js"></script>
+<script src="/statics/plugins/veevalidate/locale/zh_CN.js"></script>
+<script type="text/javascript">
+	VeeValidate.Validator.addLocale({name:'zh_CN'});
+	Vue.use(VeeValidate, { locale: 'zh_CN', });
+	
+	
+	/* var dictionary = {
+			zh_CN: {
+				messages: {
+					email: () => '邮箱格式不正确哦'
+				}
+			}
+		};
+		VeeValidate.Validator.updateDictionary(dictionary);
+		VeeValidate.Validator.extend('materialType', {
+			  messages: {
+			    zh_CN:field => '请选择素材类型'
+			  },
+			  validate: value => {
+			    return /^[1-9][0-9]{4,14}$/.test(value);
+			  }
+		}); */
+	
+	
+</script>

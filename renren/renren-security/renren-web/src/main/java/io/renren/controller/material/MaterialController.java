@@ -3,6 +3,7 @@ package io.renren.controller.material;
 import io.renren.annotation.SysLog;
 import io.renren.controller.AbstractController;
 import io.renren.entity.MaterialEntity;
+import io.renren.entity.MaterialPriceEntity;
 import io.renren.service.MaterialService;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
@@ -64,12 +65,16 @@ public class MaterialController extends AbstractController {
 	@RequestMapping("/save")
 	@RequiresPermissions("material:save")
 	public R save(@RequestBody MaterialEntity material) {
+		ValidatorUtils.validateEntity(material);
+		for (MaterialPriceEntity materialPrice : material.getMaterialPrices()) {
+			ValidatorUtils.validateEntity(materialPrice);
+		}
+		
 		Long userId = ShiroUtils.getUserId();
 
 		material.setCreateTime(MaterialEntity.getFastDate());
 		material.setCreaterId(userId);
 
-		ValidatorUtils.validateEntity(material);
 		materialService.saveAndWriteBackFileId(material);
 		return R.ok();
 	}

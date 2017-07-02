@@ -1,5 +1,7 @@
 package io.renren.entity;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 
 /**
  * 
@@ -12,8 +14,10 @@ public class MaterialTagEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	// 标签名字
+	@NotBlank(message="标签名称不能为空")
 	private String tagName;
 	// 标签描述
+	@NotBlank(message="标签定义不能为空")
 	private String tagDescription;
 	// 状态(预留)
 	private Integer status;

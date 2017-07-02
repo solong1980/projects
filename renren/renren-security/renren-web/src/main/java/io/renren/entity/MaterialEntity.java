@@ -2,6 +2,11 @@ package io.renren.entity;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * 素材表
  * 
@@ -13,18 +18,24 @@ public class MaterialEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	private Integer status = 0;
+	
+	@NotBlank(message="素材名称不能为空")
 	private String name;
 	private String tagIds;
 	private String keywordIds;
-	private Integer type = 0;// 0为未知类型
+	
+	@NotNull(message="类型必选")
+	private Integer type;	// 0为未知类型
 	private Long makerid;
 	private String maker;
 	private Integer fileCount;
 	private String description;
 
 	// 素材文件实体
+	@NotEmpty(message="请上传素材文件")
 	private AttachmentEntity[] attachments;
 	// 素材定价
+	@NotEmpty(message="请设置素材价格")
 	private List<MaterialPriceEntity> materialPrices;
 
 	public void setStatus(Integer status) {

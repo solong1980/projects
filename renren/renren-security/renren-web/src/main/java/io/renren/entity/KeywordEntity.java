@@ -1,5 +1,7 @@
 package io.renren.entity;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 
  * 
@@ -11,6 +13,7 @@ public class KeywordEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	// 关键字
+	@NotBlank(message="关键字不能为空")
 	private String keyword;
 	// 描述
 	private String description;

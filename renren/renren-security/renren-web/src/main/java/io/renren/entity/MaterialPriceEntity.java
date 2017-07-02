@@ -3,6 +3,10 @@ package io.renren.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Range;
+
 /**
  * 素材价格表
  * 
@@ -18,19 +22,26 @@ public class MaterialPriceEntity extends BaseEntity implements Serializable {
 	// 素材id
 	private Long materialId;
 	// 等级id
+	@NotNull
 	private Long gradeId;
 	// 消费获得积分
+	@NotNull(message = "请填写消费获得积分")
 	private Integer integral;
 	// 价格
+	@NotNull(message = "请填写素材价格")
+	@Range(min = 0, max = 99999)
 	private BigDecimal price;
 	// 单位:10 人民币 , 20 金币
+	@NotNull(message = "请选择单位")
 	private Integer unit;
-	
-	//前台设置是否发生变化
+
+	// 前台设置是否发生变化
 	private boolean changed;
+
 	public boolean isChanged() {
 		return changed;
 	}
+
 	public void setChanged(boolean changed) {
 		this.changed = changed;
 	}
